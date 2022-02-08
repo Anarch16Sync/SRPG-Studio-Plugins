@@ -124,8 +124,8 @@
   Fixed an error when canceling on the weapon selection screen of an attack type command skill. 
   
 -----------------------------------------------------------------------------------------
-[Introduction method]
-Put "OT_ExtraConfigSkill" in the Plugin folder.
+[How to Install]
+Copy the "OT_ExtraConfigSkill" folder in the Plugin folder.
   See also "Setting example.txt" and "Conditions that can be set for unlocking, re-action and others.txt" for setting examples.
 
 * Depending on the custom script used, the activation order check (Duplicate Skill.js) of the same type of skill may be used.
