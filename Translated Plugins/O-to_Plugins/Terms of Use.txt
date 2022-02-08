@@ -1,0 +1,35 @@
+Terms of Use
+All materials contained in this site are subject to the terms and conditions of SRPG Studio.
+
+You may not use the materials in any other tool than SRPG Studio.
+You may not lie about who created them.
+You may not modify or redistribute the material.
+If you redistribute the material, please mention the copyright even if it is not modified.
+You may use the material for free or commercial projects.
+Redistributing material to third parties for a fee is prohibited, even if it has been modified. You may not distribute the material to third parties for a fee (even if you have modified it. If you redistribute it, please make sure to distribute it free of charge).
+
+Copyright Notice and Usage Report
+Basically, you don't need to write the copyright and report the use, but if you do, please write o-to.
+
+
+If you want to redistribute your work, please put a copyright notice even if you don't modify it.
+(In the readme or something like that, you can say "The file is a script of o-to" or
+"The file is a modified version of o-to's script" is fine)
+
+
+About enquiries by e-mail
+If you send me an email on a weekday, I'll be busy and probably asleep, so it will take me a while to reply (about 3 or 4 days).
+On weekends and holidays, we will try to reply within 1 or 2 days, but it may take 3 or 4 days depending on our schedule.
+If you have a problem with our software, you will receive a notification on our blog that we have received it, and that we have investigated and fixed it.
+Please note that we will not reply to you. ÅiPlease note that we will not reply to you if the problem is difficult to solve or if there is a possibility that the problem is caused by something else.)
+Please note that it may take up to 1 or 2 weeks for us to respond to you.
+
+If you have any questions, please feel free to contact us.
+Å@If you have any questions, please do not hesitate to contact us.
+-----------------------------------------------------------------------------------------
+Blog for contact and feedback
+http://o-to-no-hokanko.blogspot.jp/
+
+Contact email address
+otogamemailrece@gmail.com
+-----------------------------------------------------------------------------------------

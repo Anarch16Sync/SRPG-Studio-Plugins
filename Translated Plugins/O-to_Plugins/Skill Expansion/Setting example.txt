@@ -1,0 +1,108 @@
+Examples of custom parameter settings
+Example 1
+{
+    EC_StartTurn : 5
+  , EC_EndTurn : 10
+}
+Can be triggered from turn 5 to turn 10
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+Example 2
+{
+    EC_OpponentNowStatus:{HP:'0-50%'}
+    EC_Range:'1-1'
+}
+Can be activated when the opponent's HP is below 50% and when the opponent is adjacent to you.
+
+
+-----------------------------------------------------------------------------------------
+
+Example of skill setting
+Example 1
+Skill type: Continuous attack
+Skill Effect: 2
+Activation rate setting: 100
+Custom parameters
+{
+  EC_isSrc:true
+}
+
+Effect: Attacks twice per round, only when innitiating combat. 
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+Example 2
+Skill type: Sure Attack
+Skill Effect: Normal
+Activation rate setting: technique %.
+Custom parameters
+{
+    EC_Correction:0.5
+  , EC_isSrc:false
+}
+
+Effect: If the opponent attacks you, there is a (Skill x 0.5)% chance that your counter attack is a sure strike.
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+Example 3
+Skill Type: Sure Attack
+Skill Effect: Finish
+Activation rate setting: Lv% (x1)
+Custom parameters
+{
+ EC_DefaultPercent:50,
+ EC_Correction:0.5,
+ EC_NowStatus:{HP:'0-50%'},
+ EC_isSrc:false,
+ EC_Putlog:True
+}
+Effect: When Hp is 50% or less, your counterattack has a (50+Lv/2)% chance of killing the enemy.
+*All activation details are printed on the console.
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+Example 4
+Skill Type: Parameter Bonus
+Skill Effect: Str+5
+Custom parameters
+{
+  EC_isSrc : true,
+  EC_Command : 'ATTACK',
+  EC_CommandDuration : 0
+}
+Effect: Use a command to attack with +5 Strenght during a battle
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+Example 5
+Skill Type: Continuous attack
+Skill Effect: 2
+Trigger rate setting: 100
+Custom parameters
+{
+    EC_isSrc : true
+  , EC_Command : 'ATTACK'
+}
+Effect: Attacks twice using a command skill
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+Example 6
+Skill Type: Preemptive Attack
+Activation rate: 100
+Custom parameters
+{
+    EC_Command : 'WAIT'
+}
+Effect: Can only attack first in the turn in which the command skill is used.
+
+
+ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
+Example 7
+Skill Type: Damage Guard
+Skill Effect: Sword/Lance/Axe Guard Rate(%) 100
+Activation rate setting: 100
+Custom parameters
+{
+    EC_Command : 'WAIT
+  , EC_TriggerCountTurn : 3
+}
+Effect: Damage is nullified 3 times during the turn in which the command skill is used.
+

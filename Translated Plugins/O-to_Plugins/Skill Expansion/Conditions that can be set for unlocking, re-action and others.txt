@@ -1,0 +1,166 @@
+For commands such as unlocking, transformation and skills activated on the map
+The following Custom Parameters can be set. 
+
+----Unlocking / Recovery / Transformation / Fusion：
+EC_TriggerCountMap(The second argument should be 'COMMAND')
+EC_CommandCoolTime
+EC_UseEP
+EC_UseFP
+EC_StartTurn
+EC_EndTurn  
+EC_TimesTurn
+EC_NowStatus
+
+Example 1: When enabling up to 3 times on one map
+{
+   EC_TriggerCountMap:[3, 'COMMAND']
+}
+
+Example 2: Make it unselectable from the command for 3 turns after executing the command
+{
+   EC_CommandCoolTime:3
+}
+
+
+----Re-action:
+EC_Command
+EC_CommandDuration(Can be used only when using EC_Command, always specify 1 or more)
+EC_CommandCoolTime(Only available when using EC_Command)
+EC_TriggerCountTurn(Be sure to specify 1 or more)
+EC_TriggerCountMap(It can be used only when EC_Command is used, and the second argument should be'COMMAND'.)
+EC_UseEP(Only available when using EC_Command)
+EC_UseFP(Only available when using EC_Command)
+EC_StartTurn
+EC_EndTurn  
+EC_TimesTurn
+EC_NowStatus
+
+* The official setting in the example below is done with a waiting turn of 0 with an activation rate of 100%.
+
+Example 1:
+It can be used up to 3 times on 1 map, and after execution, it will perform 3 turns in a row.
+Set cool time to 3 turns so that you cannot reselect from command skills during the effect time
+{
+     EC_Command           : 'WAIT'
+   , EC_CommandDuration   : 3
+   , EC_CommandCoolTime   : 3
+   , EC_TriggerCountTurn  : 1
+   , EC_TriggerCountMap   : [3, 'COMMAND']
+}
+
+Example 2:
+After executing the command skill, perform the action twice.
+Disable for 3 turns after execution.
+{
+     EC_Command           : 'WAIT'
+   , EC_CommandCoolTime   : 3
+   , EC_CommandDuration   : 1
+   , EC_TriggerCountTurn  : 2
+}
+
+Example 3:
+Always activated type. Skill holders can act twice only when HP is full
+{
+     EC_NowStatus : { HP:'100-100%' }
+   , EC_TriggerCountTurn : 1
+}
+
+Example 4:
+Always activated type. Skill holders act 3 times. For those who want to act multiple times on the enemy.
+{
+   EC_TriggerCountTurn : 2
+}
+
+----Support, parameter bonus:
+EC_Command
+EC_CommandDuration(Only available when using EC_Command)
+EC_CommandCoolTime(Only available when using EC_Command)
+EC_TriggerCountMap(It can be used only when EC_Command is used, and the second argument should be'COMMAND'.)
+EC_UseEP(Only available when using EC_Command)
+EC_UseFP(Only available when using EC_Command)
+EC_StartTurn
+EC_EndTurn  
+EC_TimesTurn
+EC_NowStatus
+
+Example 1:
+It can be used up to once on one map, and it has a support effect for 3 turns after execution.
+{
+     EC_Command           : 'WAIT'
+   , EC_CommandDuration   : 3
+   , EC_TriggerCountMap   : [1, 'COMMAND']
+}
+
+Example 2:
+Only in battle when executing command skills, fight with the stats reinforced.
+After executing the command skill, it cannot be reused for 3 turns.
+{
+     EC_Command           : 'ATTACK'
+   , EC_CommandDuration   : 0
+   , EC_CommandCoolTime   : 3
+}
+
+Example 3:
+Always activated type. Supports up to 5 turns, exerts parameter bonus effect
+{
+     EC_EndTurn : 5
+}
+
+Example 4:
+Always activated type. Support from 10 turns, parameter bonus effect is demonstrated
+{
+     EC_StartTurn : 10
+}
+
+----Weapon usage does not decrease:
+EC_Command        
+EC_CommandDuration(EC_Command使用時のみ使用可)
+EC_CommandCoolTime(EC_Command使用時のみ使用可)
+EC_TriggerCountMap(EC_Command使用時のみ使用可、第二引数は'COMMAND'にする事)
+EC_UseEP(EC_Command使用時のみ使用可)
+EC_UseFP(EC_Command使用時のみ使用可)
+EC_StartTurn
+EC_EndTurn  
+EC_TimesTurn
+EC_NowStatus
+EC_OpponentNowStatus
+EC_Range
+
+Example 1:
+It can be used up to once on one map, and the number of weapons will not decrease for 3 turns after execution.
+{
+     EC_Command           : 'WAIT'
+   , EC_CommandDuration   : 3
+   , EC_TriggerCountMap   : [1, 'COMMAND']
+}
+
+Example 2:
+The number of weapons does not decrease only during battle when executing command skills.
+After executing the command skill, it cannot be reused for 3 turns.
+{
+     EC_Command           : 'ATTACK'
+   , EC_CommandDuration   : 0
+   , EC_CommandCoolTime   : 3
+}
+
+Example 3:
+Always activated type. Weapons will no longer decrease on turns that are multiples of 2.
+{
+     EC_TimesTurn : 2
+}
+
+----Details of each Custom Parameter (see readme.txt for setting example)
+EC_TriggerCountTurn    : Set a limit on the number of skill activations in one turn
+EC_TriggerCountMap     : Set a limit on the number of skill activations on one map
+EC_UseEP               : Set consumption EP (skills listed here are consumed when command skill is selected)
+EC_UseFP               : Set consumption FP (skills listed here are consumed when command skill is selected)
+EC_NowStatus           : Set the status range required for activation
+EC_StartTurn           : Set activation start turn
+EC_EndTurn             : Set activation end turn
+EC_TimesTurn           : Set whether to activate in a specific multiple turn
+EC_Command             : Set whether it is a command skill
+EC_CommandDuration     : Number of continuous turns after executing command skill
+EC_CommandCoolTime     : The number of turns required from executing a command skill to being reusable
+EC_Range               : Set the distance to the other party (adjacent with 1-1)
+EC_OpponentNowStatus   : Set the status range of the opponent required for activation
+
