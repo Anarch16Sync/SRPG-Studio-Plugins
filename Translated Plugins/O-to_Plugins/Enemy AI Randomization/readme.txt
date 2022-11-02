@@ -1,121 +1,120 @@
------------------------------------------------------------------------------------------
-yXV—š—ğz
-  2022/10/23:V‹Kì¬
+-------------------------------------------------- ---------------------------------------
+ã€Change logã€‘
+  2022/10/23: New
   
------------------------------------------------------------------------------------------
-y“±“ü•û–@z
-uOT_EnemyAIvƒtƒHƒ‹ƒ_‚ğPluginƒtƒHƒ‹ƒ_‚Ì’†‚É“ü‚ê‚Ä‚­‚¾‚³‚¢B
+-------------------------------------------------- ---------------------------------------
+[Introduction method]
+Put the "OT_EnemyAI" folder inside the Plugin folder.
 
------------------------------------------------------------------------------------------
-yŠT—vz
-“G‚Ìs“®‚É‚Â‚¢‚ÄA’Êí‚ÍƒVƒ~ƒ…ƒŒ[ƒg‚É‚æ‚Á‚Äo‚½ƒXƒRƒA‚Ì’†‚©‚çˆê”Ô‚‚¢‚à‚Ì‚©‚ç‘I‘ğ‚³‚ê‚Ü‚·‚ªA
-ƒVƒ~ƒ…ƒŒ[ƒg‚Åo‚½ƒXƒRƒA‚ª‚‚¢s“®‚ğ•¡”ƒsƒbƒNƒAƒbƒv‚µ‚ÄA‚»‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€‚Å‘I‘ğ‚·‚é‚æ‚¤‚É‚µ‚Ü‚·B
+-------------------------------------------------- ---------------------------------------
+ã€Overviewã€‘
+Regarding the enemy's behavior, it is usually selected from the highest score obtained by simulation,
+Pick up multiple actions with high scores in the simulation and select randomly from among them.
 
-SRPG Studio‚Ì“G‚ÌƒAƒ‹ƒSƒŠƒYƒ€‚ÍUŒ‚‘ÎÛ‚ª“ñlˆÈã‚¢‚éê‡‚Í—^ƒ_ƒ‚ª‘å‚«‚¢(‚»‚ê‚©Œ‚”j‰Â”\‚È)‘Šè‚¾‚¯‚ğ‘_‚¢A
-UŒ‚‚³‚ê‚é‘ÎÛ‚ª‘_‚í‚ê‚È‚¢êŠ‚ÉˆÚ“®‚µ‚È‚¢ŒÀ‚è‚Í‘¼‚ÉUŒ‚‰Â”\‚È‘ÎÛ‚ªŠô‚ç‹‚Ä‚à‚»‚¿‚ç‚ÉUŒ‚‚·‚é–‚Íâ‘Î‚ ‚è‚Ü‚¹‚ñB
-‚Ü‚½Aó‘ÔˆÙí•t—^•Ší‚Í••ˆóŒn‚Ì‚æ‚¤‚È—]’ö‹­—Í‚È‚à‚Ì‚Å‚È‚¢‚Æ
-Šî–{“I‚É‚ÍUŒ‚‚Ì—^ƒ_ƒ‚ª‘å‚«‚¢•Ší‚Ìg—p‚ğ—Dæ‚µ‚Ä‚µ‚Ü‚¢‚Ü‚·B
-—á‚¦‚ÎˆĞ—Í‚ª4‚Ì•Ší‚ÆˆĞ—Í‚ª1‚Å“Å‚ğ—^‚¦‚é•Ší‚Ì—¼•û‚ğ“G‚ª‚Á‚Ä‚½ê‡A
-“Å‚ÌŒø‰Ê‚ª—]’ö‹­—Í‚Å‚È‚¢ŒÀ‚è‚Í“Å‚¿‚Ì•Ší‚ğg‚¤–‚Í‚ ‚è‚Ü‚¹‚ñB
+SRPG Studio's enemy algorithm aims only at opponents with high damage (or can be defeated) when there are two or more attack targets,
+As long as the attacked target does not move to a place where it cannot be targeted, it will never attack there even if there are many other targets that can be attacked.
+Also, the abnormal condition grant weapon must be very powerful like a sealed system.
+Basically, you will prioritize the use of weapons that deal more damage when attacking.
+For example, if the enemy has both a weapon with a power of 4 and a weapon with a power of 1 that inflicts poison,
+Don't use poisoned weapons unless the poison effect is too strong.
 
-‚±‚Ìƒvƒ‰ƒOƒCƒ“‚ğ“±“ü‚·‚é‚ÆUŒ‚‘ÎÛ‚ª“ñlˆÈã‚¢‚éê‡‚Í—^ƒ_ƒ‚ª‘å‚«‚¢‘Šè‚ğ•K‚¸‘_‚¤–‚ª–³‚­‚È‚èA
-ˆĞ—Í‚Ì‚‚¢•Ší‚ğg‚¢‚Â‚ÂÜó‘ÔˆÙí•t—^‚Ì•Ší‚ÅUŒ‚‚·‚é–‚ª‰Â”\‚É‚È‚è‚Ü‚·B
+By introducing this plugin, if there are two or more attack targets, you will not always aim at the opponent with a large amount of damage,
+It is possible to occasionally attack with a weapon that grants status ailments while using a weapon with high power.
 
-‚±‚Ìƒvƒ‰ƒOƒCƒ“‚Í1‚Â‚Ìƒ†ƒjƒbƒg‚É“ñí—ŞˆÈã‚ÌUŒ‚•û–@(’áˆĞ—Í‚¾‚¯‚Ç–ï‰î‚ÈˆÙí•t—^‚¿AˆÙí•t—^‚¿‚Í–³‚¢‚¯‚Ç‚ˆĞ—Í)‚ğ‚½‚¹‚½‚¢ê‡A
-ƒQ[ƒ€Œã”¼‚Å“G‚É—\‘ªŠO‚Ì“®‚«‚ğ‚³‚¹‚é–‚Å‹Ù’£Š´‚ğ‚½‚¹‚½‚¢ê‡‚É—LŒø‚Å‚·B
+If you want to have two or more types of attack methods for one unit (low power but troublesome anomaly grant, no anomaly grant but high power),
+It is effective when you want to create a sense of tension by making the enemy move unexpectedly in the latter half of the game.
 
-¦AI‚ğ•ÏX‚·‚éƒvƒ‰ƒOƒCƒ“‚Æ‚Ì‹£‡‚É‚Í’ˆÓ‚µ‚Ä‚­‚¾‚³‚¢B
+*Please be careful about conflicts with plugins that change AI.
 
------------------------------------------------------------------------------------------
-yg—p•û–@z
-‘S‘Ì‚ÌAI‚ğ’²®‚µ‚½‚¢ê‡‚ÍOT_RandomAI.js‚ÌiRandomActionType‚ÆiRandomMoveTypeA
-iActionPickUp‚ÆiMovePickUp‚Ì’l‚ğ’²®‚µ‚Ä‚­‚¾‚³‚¢B
-“Á’è‚Ìƒ†ƒjƒbƒg‚âƒNƒ‰ƒX‚Ìs“®‚ğƒ‰ƒ“ƒ_ƒ€‰»‚µ‚½‚¢ê‡‚ÍƒJƒXƒ^ƒ€ƒpƒ‰ƒ[ƒ^‚ğİ’è‚µ‚Ä‚­‚¾‚³‚¢B
+-------------------------------------------------- ---------------------------------------
+ã€how to useã€‘
+If you want to adjust the overall AI, iRandomActionType and iRandomMoveType of OT_RandomAI.js,
+Adjust the iActionPickUp and iMovePickUp values.
+Set custom parameters if you want to randomize the behavior of a specific unit or class.
 
------------------------------------------------------------------------------------------
-yƒJƒXƒpƒ‰İ’è•û–@z
+-------------------------------------------------- ---------------------------------------
+[How to set Kaspara]
 
-Eƒ†ƒjƒbƒg
+Â·unit
 {
     OT_RandomAI : { ActionType:1, MoveType:1, ActionPickUp:10, MovePickUp:999 }
 }
-	ActionType   : s“®‘I‘ğ‚Ìƒpƒ^[ƒ“(®”‚ğw’èF0`3)
-	MoveType     : s“®‚ÌˆÚ“®æ‚Ìƒpƒ^[ƒ“(®”‚ğw’èF0`6)
-	ActionPickUp : ƒ‰ƒ“ƒ_ƒ€s“®‚·‚é‚ÌƒsƒbƒNƒAƒbƒv‚·‚és“®”(®”‚ğw’èF0`)
-	MovePickUp   : s“®‚Ìƒ‰ƒ“ƒ_ƒ€‰»‚ÅƒsƒbƒNƒAƒbƒv‚·‚éˆÚ“®æ‚Ì”(®”‚ğw’èF0`)
+ActionType : Action selection pattern (specify an integer: 0 to 3)
+MoveType : Destination pattern at the time of action (specify an integer: 0 to 6)
+ActionPickUp : Number of actions to pick up when acting randomly (specify an integer: 0-)
+MovePickUp : Number of destinations to pick up by randomization at the time of action (specify an integer: 0 ~)
 
-EƒNƒ‰ƒX
+Â·class
 {
     OT_RandomAI : { ActionType:1, MoveType:1, ActionPickUp:10, MovePickUp:999 }
 }
-	ActionType   : s“®‘I‘ğ‚Ìƒpƒ^[ƒ“(0`3)
-	MoveType     : s“®‚ÌˆÚ“®æ‚Ìƒpƒ^[ƒ“(0`6)
-	ActionPickUp : ƒ‰ƒ“ƒ_ƒ€s“®‚·‚é‚ÌƒsƒbƒNƒAƒbƒv‚·‚és“®”(0`)
-	MovePickUp   : s“®‚Ìƒ‰ƒ“ƒ_ƒ€‰»‚ÅƒsƒbƒNƒAƒbƒv‚·‚éˆÚ“®æ‚Ì”(0`)
+ActionType : Action selection pattern (0-3)
+MoveType : Destination pattern for action (0-6)
+ActionPickUp : Number of actions to pick up when doing random action (0-)
+MovePickUp : Number of destinations to be picked up by randomization at the time of action (0-)
 
-¡ActionType‚Ìİ’è’l‚É‚æ‚és“®ƒpƒ^[ƒ“
-1ˆÈã‚ğİ’è‚·‚é‚Æs“®‚ªÅ“K‚Å‚ ‚é‚©‚ÌƒXƒRƒA‚ªãˆÊ‚É‚ ‚és“®‚ğActionPickUp‚Ì”‚¾‚¯ƒsƒbƒNƒAƒbƒv‚µ
-‚»‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€‚És“®‚·‚é‚æ‚¤‚É‚È‚è‚Ü‚·
+â–  Behavior patterns based on ActionType settings
+When set to 1 or more, the action with the highest score for whether the action is optimal will be picked up by the number of ActionPickUps.
+It will act randomly from among them
 
-0:s“®ƒ‰ƒ“ƒ_ƒ€‰»–³‚µ(ƒvƒ‰ƒOƒCƒ“–¢“±“ü‚Æ“¯‚¶‹““®)
-1:ƒXƒRƒA‚ª‚‚¢s“®‚Ù‚Ç‘I‘ğ‚³‚ê‚éŠm—¦‚ª‚‚­‚È‚é
-2:ƒXƒRƒA‚ª’á‚¢s“®‚Ù‚Ç‘I‘ğ‚³‚ê‚éŠm—¦‚ª‚‚­‚È‚é
-3:ƒXƒRƒA‚Ì‚’á‚É‚æ‚éŠm—¦•Ï“®–³‚µ
+0: No behavior randomization (same behavior as plug-in not installed)
+1: The higher the score, the higher the probability of being selected.
+2: Actions with lower scores are more likely to be selected
+3: No change in probability due to high or low score
 
-¡MoveType‚Ìİ’è’l‚É‚æ‚és“®ƒpƒ^[ƒ“
-1ˆÈã‚ğİ’è‚·‚é‚ÆˆÚ“®æ‚ªÅ“K‚Å‚ ‚é‚©‚ÌƒXƒRƒA‚ªãˆÊ‚É‚ ‚és“®‚ğMovePickUp‚Ì”‚¾‚¯ƒsƒbƒNƒAƒbƒv‚µ
-‚»‚Ì’†‚©‚çƒ‰ƒ“ƒ_ƒ€‚És“®‚·‚é‚æ‚¤‚É‚È‚è‚Ü‚·
+â–  Behavior patterns based on MoveType settings
+When set to 1 or more, actions with the highest score for the best destination are picked up by the number of MovePickUps.
+It will act randomly from among them
 
-0:ˆÚ“®æƒ‰ƒ“ƒ_ƒ€‚È‚µ(ƒvƒ‰ƒOƒCƒ“–¢“±“ü‚Æ“¯‚¶‹““®)
-1:Å“K‚ÈêŠ‚ª•¡”‚ ‚éê‡‚Ì‚İˆÚ“®æ‚ğƒ‰ƒ“ƒ_ƒ€‚Å‘I‚Ô
-2:‘å’ï‚ÍÅ“K‚ÈêŠ‚ÉˆÚ“®‚·‚é‚ªÅ“K‚Å‚È‚¢êŠ‚É‚àƒ‰ƒ“ƒ_ƒ€‚ÅˆÚ“®‚·‚é(UŒ‚‚É’nŒ`Œø‰Ê‚ª“¾‚ç‚ê‚È‚¢êŠ‚ÉˆÚ“®‚µ‚½‚èA”½Œ‚‚ğH‚ç‚¤ˆÊ’u‚ÅUŒ‚‚·‚é–‚ª‚ ‚é)
-3:’nŒ`Œø‰Ê‚â”½Œ‚—L–³‚ğl—¶‚¹‚¸‚Éƒ‰ƒ“ƒ_ƒ€‚ÉˆÚ“®æ‚ğŒˆ’è
-4:Å“K‚Å‚È‚¢êŠ‚É‚Šm—¦‚ÅˆÚ“®‚·‚é‚æ‚¤‚É‚È‚é(ƒAƒzAI‰»AR‘¯“™‚ÉÅ“K)
-5:Å‚àÅ“K‚Å‚È‚¢êŠ‚ÉÅ—Dæ‚ÅˆÚ“®‚·‚é(är‚ßƒvŒnAI)
-6:Å‚àÅ“K‚Å‚È‚¢êŠ‚ÉÅ—Dæ‚ÅˆÚ“®BÅ‚àÅ“K‚Å‚È‚¢êŠ‚ª•¡”‚ ‚éê‡‚ÍˆÚ“®æ‚ğƒ‰ƒ“ƒ_ƒ€‚Å‘I‚Ô
+0: No destination random (same behavior as plug-in not installed)
+1: Randomly select a destination only when there are multiple optimal locations
+2: Mostly move to the optimal location, but also move randomly to non-optimal locations (may move to locations where terrain effects cannot be obtained when attacking, or attack in positions where counterattacks are received)
+3: Randomly determine the destination without considering terrain effects or counterattacks
+4: High probability of moving to non-optimal locations (perfect for idiot AI, bandits, etc.)
+5: Move to the least optimal place with top priority (Licking AI)
+6: Move to the least optimal location with highest priority. Randomly choose a destination if there are multiple least optimal locations
 
-ƒ†ƒjƒbƒg‚ÆƒNƒ‰ƒX—¼•û‚ÉƒJƒXƒpƒ‰‚ªİ’è‚³‚ê‚Ä‚éê‡‚Íƒ†ƒjƒbƒg‚Ìİ’è‚ª—Dæ‚³‚ê‚Ü‚·B
-İ’è‚³‚ê‚Ä‚È‚¢ƒJƒXƒpƒ‰€–Ú‚ÍOT_RandomAI.js‚Ì’l‚ªg—p‚³‚ê‚Ü‚·B
-—á‚¦‚ÎƒNƒ‰ƒX‚ÉActionType‚ÆMoveType‚ğİ’èA
-ƒ†ƒjƒbƒg‚ÉActionType‚ÆActionPickUp‚ğİ’è‚µ‚½ê‡‚ÍActionType‚Íƒ†ƒjƒbƒg‚Ìİ’è‚ª—Dæ‚³‚êA
-MovePickUp‚Íƒ†ƒjƒbƒg‚ÆƒNƒ‰ƒX—¼•û‚Éİ’è‚³‚ê‚Ä‚È‚¢‚Ì‚ÅOT_RandomAI.js‚Ìİ’è‚ªg—p‚³‚ê‚Ü‚·B
+If Kaspara is set for both the unit and class, the unit setting will take precedence.
+The value of OT_RandomAI.js is used for Kaspara items that are not set.
+For example, set ActionType and MoveType in the class,
+If you set ActionType and ActionPickUp in the unit, ActionType takes precedence over the unit settings,
+MovePickUp is not set for both unit and class, so the OT_RandomAI.js setting is used.
 
------------------------------------------------------------------------------------------
-yƒQ[ƒ€’†‚Éƒ†ƒjƒbƒg‚ÌAIİ’è‚ğ•ÏX‚·‚éz
+-------------------------------------------------- ---------------------------------------
+[Change the AI â€‹â€‹settings of the unit during the game]
 
-uƒXƒNƒŠƒvƒg‚ÌÀsv‚ÌuƒR[ƒh‚ÌÀsv‚©‚ç
-ƒQ[ƒ€’†‚Éƒ†ƒjƒbƒg‚ÌAIİ’è‚ÌƒJƒXƒ^ƒ€ƒpƒ‰ƒ[ƒ^‚ğ•ÏX‚Å‚«‚Ü‚·B
+From "Run Code" in "Run Script"
+You can change the custom parameters in the AI â€‹â€‹settings of your units during the game.
 
-ŸAI‚ğİ’è‚·‚é
+â—† Set AI
 
-uƒIƒŠƒWƒiƒ‹ƒf[ƒ^vƒ^ƒu‚Ìuƒ†ƒjƒbƒgv‚ÅAI‚ğ•ÏX‚µ‚½‚¢ƒ†ƒjƒbƒg‚ğ‘I‘ğ‚µ‚½ŒãA
-ƒCƒxƒ“ƒgƒRƒ}ƒ“ƒh‚ÌuƒXƒNƒŠƒvƒg‚ÌÀsv‚ÅuƒR[ƒh‚ÌÀsv‚Éƒ`ƒFƒbƒN‚µƒeƒLƒXƒg—Ìˆæ‚É
+After selecting the unit whose AI you want to change in "Unit" on the "Original Data" tab,
+Check "Execute code" in "Execute script" of the event command and in the text area
 
 OT_RandomAI_SetUnitAI(
   { ActionType:1, MoveType:1, ActionPickUp:10, MovePickUp:999 }
 );
 
-‚Ì‚æ‚¤‚É‹Lq‚µ‚Ü‚·B
+Write like this:
 
-{}‚Ì’†‚Ì‹Lq‚Íİ’è‚µ‚½‚¢€–Ú‚ğw’è‚·‚é‚æ‚¤‚É‚µ‚Ä‚­‚¾‚³‚¢B
-—á‚¦‚Îƒ†ƒjƒbƒg‚ÌActionType‚ÆMoveType‚¾‚¯‚ğ•Ï‚¦‚½‚¢ê‡‚Í
+Specify the item you want to set in the description inside {}.
+For example, if you want to change only the ActionType and MoveType of the unit
 
 OT_RandomAI_SetUnitAI(
   { ActionType:1, MoveType:2 }
 );
 
-‚Ì‚æ‚¤‚É‹Lq‚µ‚Ü‚·B
+Write like this:
 
-ŸAI‚Ìİ’è‚ğƒNƒŠƒA‚·‚é
+â—†Clear AI settings
 
-ƒ†ƒjƒbƒg‚ÌAIİ’è‚ğíœ‚µ‚½‚¢ê‡‚Í[€–Ú–¼]:-1‚Æİ’è‚µ‚Ä‚­‚¾‚³‚¢B
-—á‚¦‚Îƒ†ƒjƒbƒg‚ÌActionType‚ÆActionPickUp‚Ìİ’è‚ğíœ‚µ‚½‚¢ê‡‚Í
+If you want to delete the AI â€‹â€‹setting of the unit, set [item name]:-1.
+For example, if you want to delete the unit's ActionType and ActionPickUp settings
 
 OT_RandomAI_SetUnitAI(
   { ActionType:-1, ActionPickUp:-1 }
 );
 
-‚Ì‚æ‚¤‚É‹Lq‚µ‚Ü‚·B
-İ’è‚ÌíœŒã‚ÌAI‚ÍƒNƒ‰ƒX‚Éİ’è’l‚ª‚ ‚ê‚ÎƒNƒ‰ƒX‚Ìİ’è’l‚É€‚¶‚½s“®‚ğA
-ƒNƒ‰ƒX‚Éİ’è’l‚ª‚È‚¯‚ê‚ÎOT_RandomAI.js‚Åİ’è‚³‚ê‚½’l‚É€‚¶‚½s“®‚ğ‚·‚é‚æ‚¤‚É‚È‚è‚Ü‚·B
-
+Write like this:
+If the AI â€‹â€‹after deleting the setting has a setting value in the class, it will act according to the setting value of the class,
+If there is no set value in the class, it will act according to the value set in OT_RandomAI.js.
