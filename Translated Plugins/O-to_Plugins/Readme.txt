@@ -447,7 +447,7 @@ Corrected because an error occurred due to the 1.060 enemy AI correction
 ■ Skill Pack
 2020/01/01
 
-■ Sortie prohibition setting
+■ Sortie Restriction
 2017/02/05
 
 ■ Battle Talk
@@ -512,7 +512,7 @@ By introducing it, you will be able to use the following skills.
 ・ Reduce the number of rounds of the opponent when hitting an attack
 ・ Modify parameters used to calculated Atk and Def
 
-■ Sortie prohibition setting
+■ Sortie Restriction
 By passing custom parameters in the map settings, you will be able to set the units to be prohibited from sortie.
 In addition, you can set the sortie prohibition setting for each unit from the "script execution" of the event.
 
