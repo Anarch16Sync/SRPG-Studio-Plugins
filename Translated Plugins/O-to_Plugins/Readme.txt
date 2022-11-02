@@ -437,7 +437,17 @@ Corrected because an error occurred due to the 1.060 enemy AI correction
   Even if the effect finishes playing, it will not proceed to the next process unless you press the skip key to skip it.
   Fixed the process to play with Dynamic Anime because there was a possibility that a problem occurred
 
-  ■ Skill activation conditions
+  2022/10/22:
+  ■ Addition of MP (EP) & Special Gauge (FP)
+  When a weapon has a recovery bonus when receiving damage and when evading
+  Fixed an issue where combat using that weapon would give the opponent a recovery bonus when damaged or evaded. 
+  FP can be set to recover after the turn has passed from the 2nd turn
+  (Possible by setting FirstTurnRecovery of UnitFP.js to false)
+  Fixed to be able to set FP initial value at map start for each unit in FP
+  (The initial FP value at the start of the map will be the initial value set for the unit + the initial value set for the class)
+
+  ■ Enemy behavior randomization
+  Create New
 
 -----------------------------------------------------------------------------------------
 [Last updated date of each material]
@@ -462,6 +472,9 @@ Corrected because an error occurred due to the 1.060 enemy AI correction
 ■ Extra Damage
 2017/07/03
 
+■ Enemy AI Randomization
+2022/10/23
+
 -----------------------------------------------------------------------------------------
 [Introduction method]
 * If you installed this script before June 20, 2015, please delete the "OT_skill" folder once.
@@ -477,11 +490,9 @@ Please remove the corresponding plugin (DuplicateSkill.js).
 Recommended for use with additional skill activation conditions.
 (Especially for status-dependent attacks, it is assumed that the same type of skill activation order check (Duplicate Skill.js) is included)
 
-* Armor break (skill-BreakAttack.js) and status-dependent attack (skill-StatusAttack.js) are by design.
-Because it is easy to conflict with another custom script (general Cal etc.), when using another custom script together
-Whether to change the folder name of "OT_skill" to "0OT_skill" and read it first
-Merge the description into another script,
-Or if you do not use it, please remove the corresponding script.
+* Armor break (skill-BreakAttack.js) and status-dependent attack (skill-StatusAttack.js) can easily conflict with another custom script (general Cal etc.),
+when using another custom script together so is recommended to change the folder name of "OT_skill" to "0OT_skill" and so it is read first
+Merge the code into another script, or if you do not use it, please remove the corresponding script.
 
 ■ If you want to add a sortie prohibition setting, put "OT_NGSortie" in the "sortie prohibition setting" folder in the Plugin folder.
 
