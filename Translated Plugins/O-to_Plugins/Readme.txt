@@ -441,10 +441,10 @@ Corrected because an error occurred due to the 1.060 enemy AI correction
 
 -----------------------------------------------------------------------------------------
 [Last updated date of each material]
-■ Skill activation conditions added
+■ Skill Expansion
 2020/05/18
 
-■ Additional skills
+■ Skill Pack
 2020/01/01
 
 ■ Sortie prohibition setting
@@ -459,7 +459,7 @@ Corrected because an error occurred due to the 1.060 enemy AI correction
 ■ MP (EP) & Special Gauge (FP) added
 2020/08/24
 
-■ Damage correction / error setting
+■ Extra Damage
 2017/07/03
 
 -----------------------------------------------------------------------------------------
@@ -495,22 +495,22 @@ Or if you do not use it, please remove the corresponding script.
 
 -----------------------------------------------------------------------------------------
 【Overview】
-■ Skill activation conditions added
-By passing a custom parameter to the skill that can set the activation rate by introducing it
+■ Skill Expansion
+Use Custom Parameters to add different trigger conditions to skills.
 The activation probability can be set to 50+ (force x 0.5), etc.
 You will be able to set activation conditions such as HP being 50% or less.
 Also, you can activate it by selecting the skill from the command.
 
-■ Additional skills
+■ Skill Pack
 By introducing it, you will be able to use the following skills.
 
 ・ Always make a critical attack when activated
-・ Defense-ignoring attack
-・ Random multiple attacks
-・ Damage absorption
-・ Continue the battle
+・ Defense-ignoring attack (Can customize amount of Defense ignored)
+・ Random multiple attacks (Aether)
+・ Damage Blocking & Absorption 
+・ Continue the battle (Accost/Charge)
 ・ Reduce the number of rounds of the opponent when hitting an attack
--Depends the attack power of the skill owner and the defense power of the attack target on a specific status.
+・ Modify parameters used to calculated Atk and Def
 
 ■ Sortie prohibition setting
 By passing custom parameters in the map settings, you will be able to set the units to be prohibited from sortie.
@@ -537,8 +537,8 @@ In addition, it is possible to set the remaining amount of EP and FP to be added
 EP is supposed to be used like MP in a normal game,
 FP is supposed to be used on the assumption that it will be charged every turn.
 
-■ Damage correction / error setting
-By introducing it, level difference correction and error will occur in the damage.
+■ Extra Damage
+By introducing it, level difference correction and error will occur in the damage, in other words, adds deviations between damage preview and damage dealt.
 
 -----------------------------------------------------------------------------------------
 【how to use】
