@@ -33,7 +33,7 @@ Adjust the iActionPickUp and iMovePickUp values.
 Set custom parameters if you want to randomize the behavior of a specific unit or class.
 
 -------------------------------------------------- ---------------------------------------
-[How to set Kaspara]
+[How to set the Custom Parameter]
 
 ·unit
 {
@@ -74,17 +74,17 @@ It will act randomly from among them
 5: Move to the least optimal place with top priority (Licking AI)
 6: Move to the least optimal location with highest priority. Randomly choose a destination if there are multiple least optimal locations
 
-If Kaspara is set for both the unit and class, the unit setting will take precedence.
-The value of OT_RandomAI.js is used for Kaspara items that are not set.
+If Custom Parameter is set for both the unit and class, the unit setting will take precedence.
+The value of OT_RandomAI.js is used for Custom Parameter items that are not set.
 For example, set ActionType and MoveType in the class,
 If you set ActionType and ActionPickUp in the unit, ActionType takes precedence over the unit settings,
 MovePickUp is not set for both unit and class, so the OT_RandomAI.js setting is used.
 
 -------------------------------------------------- ---------------------------------------
-[Change the AI ​​settings of the unit during the game]
+[Change the AI settings of the unit during the game]
 
 From "Run Code" in "Run Script"
-You can change the custom parameters in the AI ​​settings of your units during the game.
+You can change the custom parameters in the AI settings of your units during the game.
 
 ◆ Set AI
 
@@ -108,7 +108,7 @@ Write like this:
 
 ◆Clear AI settings
 
-If you want to delete the AI ​​setting of the unit, set [item name]:-1.
+If you want to delete the AI setting of the unit, set [item name]:-1.
 For example, if you want to delete the unit's ActionType and ActionPickUp settings
 
 OT_RandomAI_SetUnitAI(
@@ -116,5 +116,5 @@ OT_RandomAI_SetUnitAI(
 );
 
 Write like this:
-If the AI ​​after deleting the setting has a setting value in the class, it will act according to the setting value of the class,
+If the AI after deleting the setting has a setting value in the class, it will act according to the setting value of the class,
 If there is no set value in the class, it will act according to the value set in OT_RandomAI.js.
