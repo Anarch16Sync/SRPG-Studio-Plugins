@@ -463,7 +463,7 @@ Corrected because an error occurred due to the 1.060 enemy AI correction
 ■ Battle Talk
 2018/03/05
 
-■ Range attack item
+■ AoE Pack
 2020/09/06
 
 ■ MP (EP) & Special Gauge (FP) added
