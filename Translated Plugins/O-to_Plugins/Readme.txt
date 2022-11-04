@@ -532,15 +532,15 @@ It is a script that a line appears at the bottom of the screen every time the ch
 In addition, you can change the facial expression when dialogue occurs by setting.
 (Image like Yggdra Union)
 
-■ Range attack item
-You can use items that can perform ranged attacks by introducing them.
--You can reflect the unit ability and weapon power on the power of the item.
+■ AoE Pack
+Allows the creation of items that can perform Area of Effect attacks, healing and terrain manipulation.
+-You can add the unit stats and/or weapon power to the item effect.
 -Effects can be played when using items. You can also specify the effect when hitting, the effect when avoiding, and the effect when using damage.
--You can set recoil damage, add states, and eliminate them when using.
-・ The hit rate can be set and the ability of the unit can be reflected in the hit rate. It can be fixed.
+-You can set Hp Cost or Regen, add and/or eliminate States them when using the items.
+・ The hit rate can be set and the ability of the unit can be added in the hit rate, It can be set to always hit or ignore targets avoid.
 -You can add or remove states from the hit unit. Multiple grant / disappearance states can be specified, and the grant probability can also be set.
--The shape of the effect range can be cross-shaped or breath-shaped.
--By setting, it is possible to change the terrain of the map chip that has a specific terrain effect.
+-The shape of the Range and Area of Effect can be altered in a number of ways, straight lines, cross shapes, X shapes, cone shapes among others.
+- Can be used to change the terrain where the AoE is used.
 
 ■ MP (EP) & Special Gauge (FP) added
 By introducing it, EP (MP) and FP (Special Gauge) will be added to the parameters of the unit.
