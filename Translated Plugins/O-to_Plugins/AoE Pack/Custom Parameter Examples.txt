@@ -237,7 +237,7 @@ Setting example of "effect range 7" in the reference image
   , IER_EffectRangeType : 7
 }
 
-Example 30
+Example 21
 [The value of "Scope" on the editor side is arbitrary]
 Setting example of "effect range_whole" in the reference image
 {
@@ -245,7 +245,7 @@ Setting example of "effect range_whole" in the reference image
   , IER_EffectRangeType : 99
 }
 
-Example 31
+Example 30
 [Set the value of "Scope" on the editor side to 1]
 Spawn blocks on adjacent squares
 Erases the block when used on a block
@@ -264,5 +264,38 @@ Custom Parameter setting for items
   [
        ['ALL', false, [true, 0, 3, 20]]
      , ['BLOCK', true, []]
+  ]
+}
+
+Example 31
+[The value of "range setting" on the editor side is free]
+Change the terrain of the sea and forest within the effect range (reference video: range attack terrain change)
+
+・Select "Outdoors: 0" at runtime in the "Terrain Effects" tab of "Data Settings" and set it to "Forest: 5" in Edit Terrain Effects.
+{
+  IER_MapChipChangeGroup : ['C-1']
+}
+
+・Select "Outdoors: 0" at runtime in the "Terrain Effects" tab of "Data Settings" and set it to "River: 6" in Edit Terrain Effects.
+{
+  IER_MapChipChangeGroup : ['C-2']
+}
+
+・Select "!3 Sea: 100" for runtime in the "Terrain Effects" tab of "Data Settings", and set "Sea: 1" in Edit Terrain Effects.
+{
+  IER_MapChipChangeGroup : ['C-2']
+}
+
+・Item Custom Parameter settings
+{ 
+    OT_MinRange          : 1
+  , OT_UnitReflection    : true
+  , OT_EffectAnime       : [4, true]
+  , IER_Value            : 10
+  , IER_EffectRange      : '0-2'
+  , IER_MapChipChangeAfter : 
+  [ 
+      ['C-1', true, [true, 0, 5, 1] ]
+    , ['C-2', true, [true, 0, 2, 0] ]
   ]
 }
