@@ -81,7 +81,7 @@ var NoEquipWeaponEnable = true;
 
 
 //-----------------------------------
-// 以下、ソースコードやコード内の定義
+// Below are definitions in the source code and code
 //-----------------------------------
 var WeaponAutoActionMode = {
 	CURSORSHOW: 0,
@@ -99,15 +99,15 @@ WeaponAutoAction.setAutoActionInfo= function(unit, combination) {
 		this._weaponSelectMenu = createObject(EnemyTurnWeaponSelectMenu);
 		this._posSelector = createObject(EnemyTurnPosSelector);
 
-		// 敵が攻撃を行う時点では敵ユニットの位置座標は更新されておらず、移動前の位置に存在する事になっている
-		// 実際には敵はcombination.posIndexで指定された地点にいるので、CurrentMap.getX(combination.posIndex)などでX、Y座標を取得する必要がある
+		// At the time the enemy attacks, the position coordinates of the enemy unit are not updated, and it is supposed to exist in the position before movement.
+		// The enemy is actually at the point specified by combination.posIndex, so you need to get the X and Y coordinates with CurrentMap.getX(combination.posIndex) etc.
 		this._enemyX = CurrentMap.getX(combination.posIndex);
 		this._enemyY = CurrentMap.getY(combination.posIndex);
 
 		if( this._isWeaponSelectable() ) {
-			// 敵ルーチンでの処理なので、this._targetUnitが敵に狙われたユニット、unitが敵ユニット
-			// this._enemyX、this._enemyYは実際の敵座標
-			// this._weaponは敵の使う武器（敵は自軍と違ってUnitItemControl.getPossessionItemCount()やItemControl.getEquippedWeapon()はできない模様）
+			// Since it is processed by the enemy routine, this._targetUnit is the unit targeted by the enemy, unit is the enemy unit
+			// this._enemyX, this._enemyY are actual enemy coordinates
+			// this._weapon is the weapon used by the enemy (the enemy does not seem to be able to use UnitItemControl.getPossessionItemCount() or ItemControl.getEquippedWeapon())
 			this._weaponSelectMenu.setMenuUnitAndTarget(this._targetUnit, unit, this._enemyX, this._enemyY, this._weapon );
 		}
 }
@@ -226,13 +226,13 @@ WeaponAutoAction._createAttackParam= function() {
 
 
 //-------------------------------------
-// BaseAttackInfoBuilderクラス
+// BaseAttackInfoBuilder class
 //-------------------------------------
 var alias5 = BaseAttackInfoBuilder.createAttackInfo;
 BaseAttackInfoBuilder.createAttackInfo= function(attackParam) {
 		var attackInfo = alias5.call(this, attackParam);
 		
-		// 反撃しないことを設定
+		// Set to not counterattack
 		if( typeof attackParam.isNoEuipedWeapon === 'number' && attackParam.isNoEuipedWeapon == 1 ) {
 			attackInfo.isCounterattack = false;
 		}
@@ -243,14 +243,14 @@ BaseAttackInfoBuilder.createAttackInfo= function(attackParam) {
 
 
 //=====================================
-// ここから追加関数群
+// Additional functions from here
 //=====================================
 
 //-------------------------------------
-// WeaponAutoActionクラス追加関数
+// WeaponAutoAction class added function
 //-------------------------------------
 
-// 武器選択画面での操作
+// Operations on the Weapon Selection Screen
 WeaponAutoAction._moveWeaponSelect= function() {
 		var weapon, filter, indexArray;
 		var unit = this._targetUnit;
@@ -260,20 +260,20 @@ WeaponAutoAction._moveWeaponSelect= function() {
 			weapon = this._weaponSelectMenu.getSelectWeapon();
 			filter = FilterControl.getReverseFilter(this._targetUnit.getUnitType());
 			
-			// 選択したアイテムを装備
+			// Equip selected item
 			ItemControl.setEquippedWeapon(unit, weapon);
 			
 			indexArray = AttackChecker.getAttackIndexArray(unit, weapon, false);
 			this._posSelector.setUnitOnly(unit, weapon, indexArray, PosMenuType.Attack, filter);
 			this._posSelector._posMenu.changePosTarget(this._unit);
 			
-			// 武器選択したので、反撃武器ありをメンバ変数に設定
+			// Since the weapon is selected, set the counterattack weapon available to the member variable
 			this._isNoEuipedWeapon = 0;
 
 			this.changeCycleMode(WeaponAutoActionMode.DISPATTACKWINDOW);
 		}
 		else if (NoEquipWeaponEnable == true && input === ScrollbarInput.CANCEL) {
-			// 武器を選択していないので、武器にnullを設定
+			// We have not selected a weapon, so we set the weapon to null
 			weapon = null;
 			filter = FilterControl.getReverseFilter(this._targetUnit.getUnitType());
 			
@@ -281,7 +281,7 @@ WeaponAutoAction._moveWeaponSelect= function() {
 			this._posSelector.setUnitOnly(unit, weapon, indexArray, PosMenuType.Attack, filter);
 			this._posSelector._posMenu.changePosTarget(this._unit);
 			
-			// 武器を選択していないので、反撃武器なしをメンバ変数に設定
+			// No weapon is selected, so no counterattack weapon is set as a member variable
 			this._isNoEuipedWeapon = 1;
 
 			this.changeCycleMode(WeaponAutoActionMode.DISPATTACKWINDOW);
@@ -291,7 +291,7 @@ WeaponAutoAction._moveWeaponSelect= function() {
 }
 
 
-// 武器決定後の戦闘予測表示での操作
+// Operation in the battle prediction display after weapon selection
 WeaponAutoAction._moveAttackWindow= function() {
 		var attackParam;
 		var result = this._posSelector.movePosSelector();
@@ -318,41 +318,41 @@ WeaponAutoAction._moveAttackWindow= function() {
 }
 
 
-// 武器選択画面の描画処理
+// Weapon selection screen drawing process
 WeaponAutoAction._drawWeaponSelect= function() {
 		this._weaponSelectMenu.drawWindowManager();
 }
 
 
-// 武器決定後の戦闘予測表示の描画処理
+// Drawing processing of battle prediction display after weapon decision
 WeaponAutoAction._drawAttackWindow= function() {
 		this._posSelector.drawPosSelector();
 }
 
 
-// 反撃時の武器選択可否判定
+// Judgment of weapon selection when counterattacking
 WeaponAutoAction._isWeaponSelectable= function() {
 
-		// 被攻撃ユニットが自軍でない場合、反撃時の武器選択は不可
+		// If the attacked unit is not your own army, you cannot select a weapon when counterattacking.
 		if (this._targetUnit.getUnitType() !== UnitType.PLAYER) {
 			return false;
 		}
-		// 被攻撃ユニットがバッドステートにより行動不能なら反撃武器選択は不可
+		// Counterattack weapon cannot be selected if the attacked unit is unable to act due to a bad state.
 		if (StateControl.isBadStateOption(this._targetUnit, BadStateOption.NOACTION)) {
 			return false;
 		}
 
-		// 被攻撃ユニットがバッドステートにより暴走中なら反撃武器選択は不可
+		// Counterattack weapon cannot be selected if the attacked unit is running out of control due to a bad state.
 		if (StateControl.isBadStateOption(this._targetUnit, BadStateOption.BERSERK)) {
 			return false;
 		}
 
-		// 被攻撃側の武器で反撃可能か？（武器非所持、射程が合わない、敵or被攻撃側いずれかが一方通行武器、ならば反撃不可）
+		// Is it possible to counterattack with the weapon of the attacked side? (No weapons, range does not match, enemy or attacked side is a one-way weapon, then counterattack is not possible)
 		if (this._isCounterAttackable(this._targetUnit) === false) {
 			return false;
 		}
 
-		// 「自軍は全員無条件で反撃時に武器選択可能」では無い場合、反撃武器選択スキルを所持していなければ反撃不可
+		// If it is not ``All of your troops can unconditionally select weapons when counterattacking'', you cannot counterattack unless you have the counterattack weapon selection skill.
 		if( PlayrUnit_CounterWeaponSelectable === false ) {
 			if( SkillControl.getPossessionCustomSkill(this._targetUnit, WeaponSelectSkill) === null ) {
 				return false;
@@ -363,7 +363,7 @@ WeaponAutoAction._isWeaponSelectable= function() {
 }
 
 
-// 被攻撃側の武器で反撃可能かの判定
+// Determining whether the attacked side's weapon can counterattack
 WeaponAutoAction._isCounterAttackable= function(targetUnit) {
 		var i, item;
 		var count = UnitItemControl.getPossessionItemCount(targetUnit);
@@ -371,7 +371,7 @@ WeaponAutoAction._isCounterAttackable= function(targetUnit) {
 		
 		for (i = 0; i < count; i++) {
 			item = targetUnit.getItem(i);
-			// 被攻撃側の持つ指定武器が反撃可能ならば、trueを返す
+			// Returns true if the designated weapon possessed by the attacked side can counterattack.
 			if (this._isWeaponAllowed(targetUnit, item)) {
 				return true;
 			}
@@ -381,15 +381,15 @@ WeaponAutoAction._isCounterAttackable= function(targetUnit) {
 }
 
 
-// 被攻撃側の持つ指定武器は反撃可能かの判定
+// Determining whether the designated weapon possessed by the attacked side can counterattack
 WeaponAutoAction._isWeaponAllowed= function(unit, item) {
 		
-		// 被攻撃側が指定武器を装備出来ない（装備出来ない武器を持っていたorステートにより武器を使えない）場合は反撃不可
+		// If the attacked side cannot equip the designated weapon (if they have a weapon that cannot be equipped or cannot use the weapon due to the state), they cannot counterattack.
 		if (!ItemControl.isWeaponAvailable(unit, item)) {
 			return false;
 		}
 		
-		// 指定武器の射程が合うか、敵or被攻撃側いずれかが一方通行武器、などをチェック
+		// Check whether the range of the designated weapon matches, whether the enemy or the attacked side is a one-way weapon, etc.
 		var result = AttackChecker.isCounterAttackableWeapon(this._weapon, this._enemyX, this._enemyY, unit, item, this._targetUnit);
 		return result;
 }
@@ -398,7 +398,7 @@ WeaponAutoAction._isWeaponAllowed= function(unit, item) {
 
 
 //-------------------------------------
-// StructureBuilder（新規関数追加）
+// StructureBuilder (add new function)
 //-------------------------------------
 StructureBuilder.buildAttackParamFromCounterAttackSelect= function() {
 		return {
@@ -415,10 +415,10 @@ StructureBuilder.buildAttackParamFromCounterAttackSelect= function() {
 
 
 //-------------------------------------
-// AttackChecker（新規関数追加）
+// AttackChecker (new function added)
 //-------------------------------------
-// counterUnitがcounterWeaponで反撃できるかどうかを調べる
-// （enemyWeapon：敵の使用武器、unitx：敵X座標、unity：敵Y座標。敵の使用武器や座標を敵unitから取得できないので上位から引き渡している）
+// Check if counterUnit can counterattack with counterWeapon
+// (enemyWeapon: enemy's weapon, unitx: enemy's X coordinate, unity: enemy's Y coordinate. Since the enemy's weapon and coordinates cannot be obtained from the enemy unit, they are handed over from above)
 AttackChecker.isCounterAttackableWeapon= function(enemyWeapon, unitx, unity, counterUnit, counterWeapon, enemyUnit) {
 		var indexArray;
 		
@@ -427,23 +427,23 @@ AttackChecker.isCounterAttackableWeapon= function(enemyWeapon, unitx, unity, cou
 		}
 		
 		if (enemyWeapon !== null && enemyWeapon.isOneSide()) {
-			// 敵が「一方向」の武器を装備している場合は、反撃は発生しない
+			// If the enemy is equipped with a "one-way" weapon, no counterattack will occur
 			return false;
 		}
 		
-		// 反撃用の武器を所持していない場合は反撃できない
+		// If you do not have a counterattack weapon, you cannot counterattack.
 		if (counterWeapon === null) {
 			return false;
 		}
 		
-		// 「一方向」の武器は反撃できない
+		// "One-way" weapons cannot counterattack
 		if (counterWeapon.isOneSide()) {
 			return false;
 		}
 		
 		indexArray = IndexArray.createIndexArray(counterUnit.getMapX(), counterUnit.getMapY(), counterWeapon);
 		
-		// 反撃側の武器で、攻撃側の座標を攻撃可能かチェック
+		// Check if the attacking side's coordinates can be attacked with the counterattacking side's weapon.
 		var result = IndexArray.findPos(indexArray, unitx, unity);
 		return result;
 };
@@ -452,15 +452,15 @@ AttackChecker.isCounterAttackableWeapon= function(enemyWeapon, unitx, unity, cou
 
 
 //-------------------------------------
-// EnemyTurnWeaponSelectMenuクラス
+// EnemyTurnWeaponSelectMenu class
 //-------------------------------------
 var EnemyTurnWeaponSelectMenu = defineObject(WeaponSelectMenu,
 {
-	_enemyUnit: null,	// 敵ユニット
-	_enemyX: 0,			// 敵ユニットのX座標
-	_enemyY: 0,			// 敵ユニットのY座標
-	_weapon:null,		// 敵ユニットの武器
-	_noEquipMessageWindow:null,	// メッセージ表示ウィンドウ（反撃なしを選択出来るメッセージ用）
+	_enemyUnit: null,	// enemy unit
+	_enemyX: 0,			// x coordinate of the enemy unit
+	_enemyY: 0,			// y coordinate of the enemy unit
+	_weapon:null,		// Enemy Unit Weapons
+	_noEquipMessageWindow:null,	// Message display window (for messages that can choose no counterattack)
 
 	setMenuUnitAndTarget: function(unit, enemyUnit, enemyX, enemyY, enemyWeapon) {
 		this._enemyUnit = enemyUnit;
@@ -502,12 +502,12 @@ var EnemyTurnWeaponSelectMenu = defineObject(WeaponSelectMenu,
 
 
 //-------------------------------------
-// EnemyTurnPosSelectorクラス
+// EnemyTurnPosSelector class
 //-------------------------------------
-// 敵ターンで使用するPosSelector
+// PosSelector used in enemy turn
 var EnemyTurnPosSelector = defineObject(PosSelector,
 {
-	// 反撃時の武器選択なのでカーソル選択によるチップ点灯を行わない
+	// Since it is a weapon selection when counterattacking, chip lighting by cursor selection is not performed.
 	setUnitOnly: function(unit, item, indexArray, type, filter) {
 		this._unit = unit;
 		this._indexArray = indexArray;
@@ -518,7 +518,7 @@ var EnemyTurnPosSelector = defineObject(PosSelector,
 		this._posCursor.setParentSelector(this);
 	},
 	
-	// 反撃時の武器選択なので攻撃対象は確定済。よってmovePosSelector内でthis._posCursor.checkCursor()を呼び出さないようにしている。
+	// Since it is a weapon selection at the time of counterattack, the attack target has been confirmed. Therefore, I try not to call this.pos cursor.check cursor() inside the move pos selector.
 	movePosSelector: function() {
 		var result = PosSelectorResult.NONE;
 		
@@ -537,7 +537,7 @@ var EnemyTurnPosSelector = defineObject(PosSelector,
 		return result;
 	},
 	
-	// 反撃時の武器選択では選択対象が不要な為、カーソルを描画しない
+	// Weapon selection at the time of counterattack does not draw the cursor because there is no need to select a target.
 	drawPosSelector: function() {
 		if (this._posCursor === null) {
 			return;
@@ -553,7 +553,7 @@ var EnemyTurnPosSelector = defineObject(PosSelector,
 
 
 //-------------------------------------
-// NoEquipMessageWindowクラス
+// NoEquipMessageWindow Class
 //-------------------------------------
 // "You can choose not to counterattack with the cancel key" display window
 var NoEquipMessageWindow = defineObject(BaseWindow,

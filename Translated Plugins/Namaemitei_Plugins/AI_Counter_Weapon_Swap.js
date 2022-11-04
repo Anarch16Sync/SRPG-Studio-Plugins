@@ -71,7 +71,7 @@ var ATTACKABLE_SKILL_KEYWORD  = 'sokuou';	// If IS_ATTACKABLE_AUTO_ENABLE = fals
 
 
 //-------------------------------------
-// PosMenuクラス
+// PosMenu class
 //-------------------------------------
 PosMenu.changePosTarget= function(targetUnit) {
 		var targetItem, isLeft;
@@ -83,7 +83,7 @@ PosMenu.changePosTarget= function(targetUnit) {
 		
 		this._currentTarget = targetUnit;
 
-		// 攻撃対象がプレイヤーユニットでない場合は、反撃可能な武器を自動選択
+		// If the attack target is not a player unit, automatically select a weapon that can counterattack.
 		if( ItemControl.isAttackableWeapon(targetUnit) == true ) {
 			targetItem = ItemControl.getAttackableWeapon(targetUnit, this._unit);
 
@@ -93,21 +93,21 @@ PosMenu.changePosTarget= function(targetUnit) {
 		}
 		targetItem = ItemControl.getEquippedWeapon(targetUnit);
 		
-		// srcを常に左側に表示するものとする
+		// Src shall always be displayed on the left
 		isLeft = Miscellaneous.isUnitSrcPriority(this._unit, targetUnit);
 		
-		// 自軍を左側に表示することを優先している(左側の方が見やすいと判断)
-		// このため、自軍が仕掛けた場合は当然左側に表示されるが、
-		// 自軍が仕掛けられた場合でも左側に表示される。
-		// 両方、自軍である場合は仕掛けた方を左側に表示する。
+		// Prioritize displaying your army on the left side (judging that the left side is easier to see)
+		// For this reason, if your army sets it, it will naturally be displayed on the left side,
+		// It will be displayed on the left even if your army is set up.
+		// If both are in your army, the one who set it is displayed on the left.
 		if (isLeft) {
-			// 仕掛けたのは自軍であるため、これを_posWindowLeftに指定
+			// Since it was your own army that set it up, specify this as pos window left
 			this._posWindowLeft.setPosTarget(this._unit, this._item, targetUnit, targetItem, true);
 			this._posWindowRight.setPosTarget(targetUnit, targetItem, this._unit, this._item, false);
 		}
 		else {
-			// 仕掛けたのは自軍ではない。
-			// この場合、targetUnitが自軍であるため、これを_posWindowLeftに指定。
+			// It wasn't my own army that set it up.
+			// In this case, the targetUnit is your army, so specify it as _posWindowLeft.
 			this._posWindowLeft.setPosTarget(targetUnit, targetItem, this._unit, this._item, true);
 			this._posWindowRight.setPosTarget(this._unit, this._item, targetUnit, targetItem, false);
 		}
@@ -117,39 +117,39 @@ PosMenu.changePosTarget= function(targetUnit) {
 
 
 //-------------------------------------
-// ItemControlクラス
+// ItemControl class
 //-------------------------------------
-// 被攻撃側が、攻撃側に自動反撃可能かどうかの判定
+// Determining whether the attacked side can automatically counterattack the attacker
 ItemControl.isAttackableWeapon= function(unit) {
-		// 自軍ユニットの場合は自動反撃武器選択は行わない
+		// Automatic counterattack weapon selection is not performed for friendly units.
 		if( unit.getUnitType() == UnitType.PLAYER ) {
 			return false;
 		}
 		
-		// 同盟ユニットの場合、IS_ATTACKABLE_ALLY_ENABLEがtrueでない場合は自動反撃武器選択は行わない
+		// For allied units, no automatic counterattack weapon selection unless is attackable ally enable is true
 		if( unit.getUnitType() == UnitType.ALLY && IS_ATTACKABLE_ALLY_ENABLE == false ) {
 			return false;
 		}
 		
-		// 自動反撃武器選択フラグ（IS_ATTACKABLE_AUTO_ENABLE）がfalse、かつ、
-		// キーワード（ATTACKABLE_SKILL_KEYWORD）のカスタムスキル未所持なら自動反撃武器選択は行わない
+		// Automatic counterattack weapon selection flag (IS_ATTACKABLE_AUTO_ENABLE) is false, and
+		// Automatic counterattack weapon selection is not performed if the custom skill of the keyword (ATTACKABLE_SKILL_KEYWORD) is not possessed.
 		if( IS_ATTACKABLE_AUTO_ENABLE == false && !SkillControl.getPossessionCustomSkill(unit, ATTACKABLE_SKILL_KEYWORD) ) {
 			return false;
 		}
 		
-		// 行動不能の場合はfalseを返す
+		// Returns false if incapacitated
 		if (StateControl.isBadStateOption(unit, BadStateOption.NOACTION)) {
 			return false;
 		}
 		
-		// 自動反撃武器選択フラグ（IS_ATTACKABLE_AUTO_ENABLE）がtrue、または、
-		// カスタムスキル名（ATTACKABLE_SKILL_NAME）のスキルを所持するユニットなら自動反撃武器選択を行う
+		// Automatic counterattack weapon selection flag (IS_ATTACKABLE_AUTO_ENABLE) is true, or
+		// If the unit possesses the skill with the custom skill name (ATTACKABLE_SKILL_NAME), it will automatically select a counterattack weapon.
 		return true;
 }
 
 
-// 被攻撃側で、攻撃側に反撃可能な武器を探して取得する
-// 反撃可能な一番上の武器を使用する場合
+// On the attacked side, find and acquire a weapon that can counterattack the attacker.
+// When using the top weapon that can counterattack
 if( IS_CALCULATE_SCORE == false ) {
 	ItemControl.getAttackableWeapon= function(targetUnit, unit) {
 		var indexArray;
@@ -159,40 +159,40 @@ if( IS_CALCULATE_SCORE == false ) {
 		var targetweapon;
 		var result;
 		
-		// 反撃が許可されていない場合は処理終了
+		// If the counterattack is not permitted, the process ends.
 		if (!Calculator.isCounterattackAllowed(unit, targetUnit)) {
 			return null;
 		}
 		
 		weapon = ItemControl.getEquippedWeapon(unit);
 		if (weapon !== null && weapon.isOneSide()) {
-			// 攻撃側が「一方向」の武器を装備している場合は、反撃出来ない為処理終了
+			// If the attacking side is equipped with a "one-way" weapon, the process ends because it cannot counterattack.
 			return null;
 		}
 		
 		count = UnitItemControl.getPossessionItemCount(targetUnit);
-		// 所持ている武器の中から、反撃可能な武器を探す
+		// Search for a weapon that can counterattack from the weapons you have
 		for (i = 0; i < count; i++) {
 			targetweapon = UnitItemControl.getItem(targetUnit, i);
 			if (targetweapon !== null && this.isWeaponAvailable(targetUnit, targetweapon)) {
-				// 「一方向」の武器は反撃できない
+				// "One-way" weapons cannot counterattack
 				if (targetweapon.isOneSide()) {
 					continue;
 				}
 				
-				// superbow1.2改.txtが無い場合はこちら
+				// Click here if there is no Superbow1.2 Kai.txt
 				if( typeof SKILL_SUPERBOW_USE_ENABLE === 'undefined' || SKILL_SUPERBOW_USE_ENABLE !== true ) {
 					indexArray = IndexArray.createIndexArray(targetUnit.getMapX(), targetUnit.getMapY(), targetweapon);
 				}
-				// superbow1.2改.txtが入っていれば強弓などを加味する
+				// If Superbow1.2 Kai.txt is included, add a strong bow etc.
 				else {
 					skill_superbow = SkillControl.getPossessionCustomSkill(targetUnit,'superbow');
 					skill_proximity = SkillControl.getPossessionCustomSkill(targetUnit,'Proximity_fire');
 					indexArray = IndexArray.createsuperbowBySkill(targetUnit.getMapX(), targetUnit.getMapY(), targetweapon, skill_superbow, skill_proximity);
 				}
 				
-				// 反撃側の武器で、攻撃側の座標を攻撃可能ならばその武器を返す
-				// 一番最初に検出した反撃可能な武器を返している（最適な武器を取り出していない）
+				// If the attacking side's coordinates can be attacked with the counterattacking side's weapon, the weapon is returned.
+				// Returning the first weapon detected that can counterattack (not taking out the best weapon)
 				result = IndexArray.findPos(indexArray, unit.getMapX(), unit.getMapY());
 				if( result == true ) {
 					return targetweapon;
@@ -203,7 +203,7 @@ if( IS_CALCULATE_SCORE == false ) {
 		return null;
 	};
 }
-// スコアが一番良いものを使用する場合
+// When using the one with the best score
 else {
 	ItemControl.getAttackableWeapon= function(targetUnit, unit) {
 		var indexArray;
@@ -221,45 +221,45 @@ else {
 		combination.targetUnit = unit;
 		combination.plusScore  = 0;
 		
-		// 反撃が許可されていない場合は処理終了
+		// If the counterattack is not permitted, the process ends.
 		if (!Calculator.isCounterattackAllowed(unit, targetUnit)) {
 			return null;
 		}
 		
 		weapon = ItemControl.getEquippedWeapon(unit);
 		if (weapon !== null && weapon.isOneSide()) {
-			// 攻撃側が「一方向」の武器を装備している場合は、反撃出来ない為処理終了
+			// If the attacking side is equipped with a "one-way" weapon, the process ends because it cannot counterattack.
 			return null;
 		}
 		
 		count = UnitItemControl.getPossessionItemCount(targetUnit);
-		// 所持ている武器の中から、反撃可能な武器を探す
+		// Search for a weapon that can counterattack from the weapons you have
 		for (i = 0; i < count; i++) {
 			targetweapon = UnitItemControl.getItem(targetUnit, i);
 			if (targetweapon !== null && this.isWeaponAvailable(targetUnit, targetweapon)) {
-				// 「一方向」の武器は反撃できない
+				// "One-way" weapons cannot counterattack
 				if (targetweapon.isOneSide()) {
 					continue;
 				}
 				
-				// superbow1.2改.txtが無い場合はこちら
+				// Click here if there is no Superbow1.2 Kai.txt
 				if( typeof SKILL_SUPERBOW_USE_ENABLE === 'undefined' || SKILL_SUPERBOW_USE_ENABLE !== true ) {
 					indexArray = IndexArray.createIndexArray(targetUnit.getMapX(), targetUnit.getMapY(), targetweapon);
 				}
-				// superbow1.2改.txtが入っていれば強弓などを加味する
+				// If Superbow1.2 Kai.txt is included, add a strong bow etc.
 				else {
 					skill_superbow = SkillControl.getPossessionCustomSkill(targetUnit,'superbow');
 					skill_proximity = SkillControl.getPossessionCustomSkill(targetUnit,'Proximity_fire');
 					indexArray = IndexArray.createsuperbowBySkill(targetUnit.getMapX(), targetUnit.getMapY(), targetweapon, skill_superbow, skill_proximity);
 				}
 				
-				// 反撃側の武器で、攻撃側の座標を攻撃可能ならばその武器のスコアを算出し
-				// 一番スコアがいい武器を返す
+				// If the attacking side's coordinates can be attacked with the counterattacking side's weapon, the score of that weapon is calculated.
+				// Return the weapon with the highest score
 				result = IndexArray.findPos(indexArray, unit.getMapX(), unit.getMapY());
 				if( result == true ) {
 					combination.item = targetweapon;
 					score = AIScorer.Weapon.getScore(targetUnit, combination);
-// 反撃可能武器のスコア（デバッグ用）
+// Score of counterattackable weapons (for debugging)
 //root.log(targetweapon.getName()+':'+score);
 					if( score > max_score ) {
 						max_score = score;
@@ -269,8 +269,8 @@ else {
 			}
 		}
 		
-// 選んだ反撃可能武器のスコア（デバッグ用）
-//if( maxWeapon != null){
+// Score of selected counterattackable weapon (for debugging)
+//if( maxWeapon != null) {
 //	root.log('result '+maxWeapon.getName()+':'+max_score);
 //}
 //else{
@@ -283,14 +283,14 @@ else {
 
 
 //-------------------------------------
-// AttackCheckerクラス
+// AttackChecker class
 //-------------------------------------
-// 反撃可能かのチェック（座標単位）※敵AIで、反撃のスコア算出時のみ呼び出されている関数に武器持ち替え処理を追加した
+// Check if it is possible to counterattack (coordinate unit)
 AttackChecker.isCounterattackPos= function(unit, targetUnit, x, y) {
 		var indexArray;
 		var weapon;
 		
-		// 敵、同盟ユニットが自動反撃可能ならば反撃可能な武器に持ち替える
+		// If the enemy or allied unit can counterattack automatically, switch to a weapon that can counterattack.
 		if( ItemControl.isAttackableWeapon(targetUnit) == true ) {
 			weapon = ItemControl.getAttackableWeapon(targetUnit, unit);
 			if (weapon === null) {
@@ -298,7 +298,7 @@ AttackChecker.isCounterattackPos= function(unit, targetUnit, x, y) {
 			}
 			ItemControl.setEquippedWeapon(targetUnit, weapon);
 		}
-		// 敵、同盟ユニットが自動反撃可能でなければ通常通り
+		// If the enemy and allied units are not capable of automatic counterattack, it will be normal
 		else {
 			weapon = ItemControl.getEquippedWeapon(targetUnit);
 			if (weapon === null) {
@@ -306,11 +306,11 @@ AttackChecker.isCounterattackPos= function(unit, targetUnit, x, y) {
 			}
 		}
 		
-		// superbow1.2改.txtが無い場合はこちら
+		// Click here if there is no Superbow1.2 Kai.txt
 		if( typeof SKILL_SUPERBOW_USE_ENABLE === 'undefined' || SKILL_SUPERBOW_USE_ENABLE !== true ) {
 			indexArray = IndexArray.createIndexArray(targetUnit.getMapX(), targetUnit.getMapY(), weapon);
 		}
-		// superbow1.2改.txtが入っていれば強弓などを加味する
+		// If Superbow1.2 Kai.txt is included, add a strong bow etc.
 		else {
 			var skill_superbow = SkillControl.getPossessionCustomSkill(targetUnit,'superbow');
 			var skill_proximity = SkillControl.getPossessionCustomSkill(targetUnit,'Proximity_fire');
