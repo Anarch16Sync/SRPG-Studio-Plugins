@@ -528,9 +528,9 @@ By passing custom parameters in the map settings, you will be able to set the un
 In addition, you can set the sortie prohibition setting for each unit from the "script execution" of the event.
 
 ■ Battle Talk
-It is a script that a line appears at the bottom of the screen every time the character acts during the battle.
+Allows for setting short lines of text to appear for each action during battle scenes or map battles, in map battles a face is also added to the UI.
 In addition, you can change the facial expression when dialogue occurs by setting.
-(Image like Yggdra Union)
+(Somthing like the battles in Yggdra Union or Vanguard Bandits)
 
 ■ AoE Pack
 Allows the creation of items that can perform Area of Effect attacks, healing and terrain manipulation.
