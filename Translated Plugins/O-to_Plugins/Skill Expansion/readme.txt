@@ -636,8 +636,8 @@ EC_OpponentAttackCount: '1-100' Can be activated after the opponent attacks once
 Set the distance from your own square to the opponent's square as the activation condition.
 
 example:
-EC_OpponentAttackCount: '1-1' Can be activated if the opponent is adjacent
-EC_OpponentAttackCount: '2-3' Can be activated if it is 2-3 from your own square to the opponent's square 
+EC_Range: '1-1' Can be activated if the opponent is adjacent
+EC_Range: '2-3' Can be activated if it is 2-3 from your own square to the opponent's square 
 
 
 ーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーーー
