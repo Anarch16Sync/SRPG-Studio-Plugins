@@ -33,7 +33,7 @@ The activation conditions are displayed in the skill description column.
   Added definition of duration and cool time
 
   2020/01/01
-  When setting Kaspara that adds the parameter specified for the activation rate to the activation rate
+  When setting Custom Parameters that adds the parameter specified for the activation rate to the activation rate
   Fixed the information to be displayed in the window.
 
   2020/03/29
@@ -298,7 +298,7 @@ SkillInfoWindow.drawWindowContent = function(x, y) {
 		OT_SkillInfoExtraWindow.rendererMessage(objRendererPos, EC_SituationRenderer.getPhysicsMessage(skill.custom.EC_isOpponentPhysics, true), length, color, font);
 		
 		//---Setting whether it can be activated according to the situation at the time of battle---------------------------------------
-		// 特定のターンで発動可能
+        // Can be activated on specific turns
 		OT_SkillInfoExtraWindow.rendererMessage(objRendererPos, EC_SituationRenderer.getTurnMessage(skill.custom.EC_StartTurn, skill.custom.EC_EndTurn, skill.custom.EC_TimesTurn), length, color, font);
 		
 		// Can be activated by first attack or second attack
