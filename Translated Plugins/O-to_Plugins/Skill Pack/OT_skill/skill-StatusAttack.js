@@ -1,7 +1,7 @@
 
 /*--------------------------------------------------------------------------
   
-Skill "Status Dependent Attack"
+Skill "Stat Dependent Attack"
   The attack power of the skill owner and the defense power of the attack target were specified with custom parameters.
   It will be status dependent.
   
