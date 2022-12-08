@@ -1,0 +1,817 @@
+<!--
+    Custom Parameter UI Generator
+
+    Version 0.8 By MarkyJoe1990
+
+    Using this HTML document, you can generate a UI to make
+    it much easier for people to use your plugin, since it
+    mostly eliminates the need for them to manually input
+    custom parameters.
+
+    The only thing you need to modify here is the variable
+    "schema", which is right below this comment. You can set
+    the title, and the options your plugin has.
+
+    Currently, this is not finished, and only supports the
+    use of numbers, dropdown menus, booleans and strings.
+    You cannot use arrays or binary (which will use multiple
+    checkboxes, most likely).
+
+    How to use:
+    Your settings is an array of objects. They have the following
+    properties.
+
+    type: String. Sets the input format. can use the following values:
+        "number", "text", "dropdown", "checkbox"
+    id: String. Set this to your custom parameter's name exactly. ie: startRange
+    label: String. Sets the label for the current option. Basically, it puts your
+        custom parameter in lamens terms so people can understand what it does.
+    info: String. Optional. Provides extra information about your custom parameter.
+    default: The default value your parameter is set to.
+    required: Boolean. Set to true to force the user to fill in the current field.
+        If they try to submit and generate custom parameters from this, it will give
+        them an error message letting them know which field needs to be filled in.
+    placeholder: String. Sets the placeholder text for when a field is not filled in.
+
+    Missing features:
+        - Ability to use Arrays
+        - Ability to use Binaries / multiple checkboxes.
+-->
+<script>
+    const schema = {
+    "title": "O-to's Skill Expansion Custom Parameter Companion",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "EC_Putlog",
+            "label": "Print Activation Rate to Log",
+            "info": "Debug"
+        },
+        {
+            "type": "number",
+            "id": "EC_DefaultPercent",
+            "label": "Flat Rate Correction",
+			"info": "ie (Lv + 10)%",
+            "placeholder": 0
+        },
+        {
+            "type": "number",
+            "id": "EC_Correction ",
+            "label": "Multiplier Rate Correction",
+			"info": "ie (0.5 x Str)%",
+            "placeholder": 0
+        },
+        {
+            "type": "literal",
+            "id": "EC_AddTriggerRate",
+            "label": "Trigger Rate Stat bonus",
+            "default": "{ LV:0.0, HP:0.0, POW:0.5, MAG:0.5, SKI:0.0, SPD:0.0, LUK:0.0, DEF:0.0, MDF:0.0, MOV:0.0, WLV:0.0, BLD:0.0 }",
+			"placeholder": "{ LV:0.0, HP:0.0, POW:0.5, MAG:0.5}",
+			"info": "ie Str x 0.5 + Mag x 0.5 "
+        },
+		{
+            "type": "text",
+            "id": "EC_ScopePercent",
+            "label": "Rate Range",
+            "placeholder": "25-75%",
+			"info": "Format: Min-Max%"
+        },
+		{
+            "type": "checkbox",
+            "id": "EC_isAbandonIgnore",
+            "label": "Ignores Invalidate Skill?",
+        },
+		{
+            "type": "literal",
+            "id": "EC_NowStatus",
+            "label": "Req Stat Range",
+            "default": "{ LV:'0-9', HP:'0-50%', POW:'0-10', MAG:'0-9', SKI:'0-9', SPD:'0-10', LUK:'0-10', DEF:'0-10', MDF:'0-10', MOV:'0-10', WLV:'0-10', BLD:'0-10' }",
+			"placeholder": "{ LV:'0-9', HP:'0-50%', POW:'0-10', MAG:'0-9%'}",
+			"info": "Min-Max flat range or Min-Max% for proportional range, in case of stats the percentance is in relation to the class max value"
+        },
+		{
+            "type": "literal",
+            "id": "EC_OpponentNowStatus",
+            "label": "Req Opponent Stat Range",
+            "default": "{ LV:'0-9', HP:'0-50%', POW:'0-10', MAG:'0-9', SKI:'0-9', SPD:'0-10', LUK:'0-10', DEF:'0-10', MDF:'0-10', MOV:'0-10', WLV:'0-10', BLD:'0-10' }",
+			"placeholder": "{ LV:'0-9', HP:'0-50%', POW:'0-10', MAG:'0-9%'}",
+			"info": "Min-Max flat range or Min-Max% for proportional range, in case of stats the percentance is in relation to the class max value"
+        },
+		{
+            "type": "checkbox",
+            "id": "EC_isPhysics",
+            "label": "Req Physical Weapon?",
+			"info": "False to Req Magic Weapon"
+        },
+		{
+            "type": "checkbox",
+            "id": "EC_isOpponentPhysics",
+            "label": "Enemy has Physical Weapon?",
+			"info": "False to Req Magic Weapon"
+        },
+		{
+            "type": "number",
+            "id": "EC_StartTurn",
+            "label": "Min Turn Req",
+			"info": "ie Activates after turn 3",
+            "placeholder": 0
+        },
+		{
+            "type": "number",
+            "id": "EC_EndTurn",
+            "label": "Max Turn Req",
+			"info": "ie Activates before turn 5",
+            "placeholder": 0
+        },
+		{
+            "type": "number",
+            "id": "EC_TimesTurn",
+            "label": "Turn Multiple Req",
+			"info": "ie Activates if turn is multiple of 2",
+            "placeholder": 0
+        },
+		{
+            "type": "checkbox",
+            "id": "EC_isSrc",
+            "label": "Is Active Turn?",
+			"info": "False to activate only when being attacked",
+            "placeholder": 0
+        },
+		{
+            "type": "literal",
+            "id": "EC_OverStatus",
+            "label": "Higher Stat Req",
+            "default": "{ LV:0, HP:0, POW:0, MAG:0, SKI:0, SPD:0, LUK:0, DEF:0, MDF:0, MOV:0, WLV:0, BLD:0 }",
+			"placeholder": "{ LV:1, HP:10, POW:5, MAG:1}",
+			"info": "The skill activates when your stats are above your opponent's in this amount"
+        },
+		{
+            "type": "literal",
+            "id": "EC_UnderStatus",
+            "label": "Higher Stat Req",
+            "default": "{ LV:0, HP:0, POW:0, MAG:0, SKI:0, SPD:0, LUK:0, DEF:0, MDF:0, MOV:0, WLV:0, BLD:0 }",
+			"placeholder": "{ LV:1, HP:10, POW:5, MAG:1}",
+			"info": "The skill activates when your stats are below your opponent's in this amount"
+        },
+		{
+            "type": "dropdown",
+            "id": "EC_Command",
+            "label": "Command Type",
+			"info": "Makes the skill trigger on command",
+            "options": [
+                {
+                    "label": "Active Command",
+                    "value": "ATTACK"
+                },
+                {
+                    "label": "Passive Command",
+                    "value": "WAIT"
+                }
+            ]
+        },
+		{
+            "type": "number",
+            "id": "EC_CommandDuration",
+            "label": "Command Skill Turn Duration",
+			"info": "Requires Command Type",
+            "placeholder": 0
+        },
+		{
+            "type": "number",
+            "id": "EC_CommandCoolTime",
+            "label": "Skill Turn Cooldown",
+			"info": "Only valid for trigger or command skills",
+            "placeholder": 0
+        },
+		{
+            "type": "number",
+            "id": "EC_TriggerCountBattle",
+            "label": "Skill Battle Activation Limit",
+			"info": "Limit of times the skill can activate per battle, does nothing for trigger skills with Turn Cooldown",
+            "placeholder": 0
+        },
+		{
+            "type": "number",
+            "id": "EC_TriggerCountTurn",
+            "label": "Skill Turn Activation Limit",
+			"info": "Limit of times the skill can activate per Turn, does nothing for trigger skills with Turn Cooldown",
+            "placeholder": 0
+        },
+		{
+            "type": "literal",
+            "id": "EC_TriggerCountMap",
+            "label": "Skill Map Activation Limit",
+			"info": "Number of time the skill can be used per MAP or times that can be used as a COMMAND",
+            "placeholder": "[3, 'MAP'] or [3,'COMMAND']"
+        },
+		{
+            "type": "text",
+            "id": "EC_AttackCount",
+            "label": "Req Attack Count Range",
+			"info": "Min-Max range of attacks done for the skill to activate",
+            "placeholder": "1-100"
+        },
+		{
+            "type": "text",
+            "id": "EC_OpponentAttackCount",
+            "label": "Req Enemy's Attack Count Range",
+			"info": "Min-Max range of attacks done by the enemy for the skill to trigger",
+            "placeholder": "1-100"
+        },
+		{
+            "type": "text",
+            "id": "EC_Range",
+            "label": "Req Distance Range",
+			"info": "Min-Max distance to the enemy required",
+            "placeholder": "2-3"
+        },
+		{
+            "type": "dropdown",
+            "id": "EC_FusionID",
+            "label": "Fusion Req",
+			"info": "Makes the skill usable only when fused or not fused",
+            "options": [
+                {
+                    "label": "While Fused",
+                    "value": "ALL"
+                },
+                {
+                    "label": "While not Fused",
+                    "value": "NON"
+                }
+            ]
+        },
+		{
+            "type": "literal",
+            "id": "EC_FusionID",
+            "label": "Specific Fusion Req",
+			"info": "List of Ids of possible Fusions required for the skill **Not Usable at the same time that Fusion Req**",
+            "placeholder": "[2,3]"
+        },
+		{
+            "type": "dropdown",
+            "id": "EC_OpponentFusionID",
+            "label": "Enemy Fusion Req",
+			"info": "Makes the skill trigger only when the enemy is fused or not fused",
+            "options": [
+                {
+                    "label": "While Fused",
+                    "value": "ALL"
+                },
+                {
+                    "label": "While not Fused",
+                    "value": "NON"
+                }
+            ]
+        },
+		{
+            "type": "literal",
+            "id": "EC_OpponentFusionID",
+            "label": "Specific Enemy Fusion Req",
+			"info": "List of Ids of possible Fusions required for the skill **Not Usable at the same time that Enemy Fusion Req**",
+            "placeholder": "[2,3]"
+        },
+		{
+            "type": "dropdown",
+            "id": "EC_StateID",
+            "label": "State Req",
+			"info": "Conditions related to states",
+            "options": [
+                {
+                    "label": "With Any State",
+                    "value": "ALL"
+                },
+				{
+                    "label": "With Any Good State",
+                    "value": "GOOD"
+                },
+				{
+                    "label": "With Any Bad State",
+                    "value": "BAD"
+                },
+                {
+                    "label": "Without States",
+                    "value": "NON"
+                },
+				{
+                    "label": "Without Good States",
+                    "value": "NONGOOD"
+                },
+				{
+                    "label": "Without Bad States",
+                    "value": "NONBAD"
+                },
+            ]
+        },
+		{
+            "type": "literal",
+            "id": "EC_StateID",
+            "label": "Specific State Req",
+			"info": "List of State Ids required for the skill, use NON as the first element to require not having those states **Not Usable at the same time that State Req**",
+            "placeholder": "[2,3] or ['NON',1,2]"
+        },
+		{
+            "type": "dropdown",
+            "id": "EC_OpponentStateID",
+            "label": "Enemy State Req",
+			"info": "Conditions related to the enemy having states",
+            "options": [
+                {
+                    "label": "With Any State",
+                    "value": "ALL"
+                },
+				{
+                    "label": "With Any Good State",
+                    "value": "GOOD"
+                },
+				{
+                    "label": "With Any Bad State",
+                    "value": "BAD"
+                },
+                {
+                    "label": "Without States",
+                    "value": "NON"
+                },
+				{
+                    "label": "Without Good States",
+                    "value": "NONGOOD"
+                },
+				{
+                    "label": "Without Bad States",
+                    "value": "NONBAD"
+                },
+            ]
+        },
+		{
+            "type": "literal",
+            "id": "EC_OpponentStateID",
+            "label": "Specific Enemy State Req",
+			"info": "List of State Ids required for the skill, use NON as the first element to require not having those states **Not Usable at the same time that State Req**",
+            "placeholder": "[2,3] or ['NON',1,2]"
+        },
+		{
+            "type": "literal",
+            "id": "EC_WeaponType",
+            "label": "Weapon Type Req",
+			"info": "Set if the skill requires a specific weapon type or ALL the weapon types of certain tabs, PHYSCIS for fighter, SHOOT for Archer and MAGIC for Mage weapons",
+			"default": "{PHYSICS:'ALL', SHOOT:'ALL', MAGIC:'ALL' }",
+            "placeholder": "{NON:true, PHYSICS:[0, 1], SHOOT:[1], MAGIC:'ALL' }"
+        },
+		{
+            "type": "literal",
+            "id": "EC_OpponentWeaponType",
+            "label": "Enemy Weapon Type Req",
+			"info": "Set if the skill requires that the enemy has an specific weapon type or ALL the weapon types of certain tabs, PHYSCIS for fighter, SHOOT for Archer and MAGIC for Mage weapons",
+			"default": "{PHYSICS:'ALL', SHOOT:'ALL', MAGIC:'ALL' }",
+            "placeholder": "{NON:true, PHYSICS:[0, 1], SHOOT:[1], MAGIC:'ALL' }"
+        },
+		{
+            "type": "number",
+            "id": "EC_Priority",
+            "label": "Skill Priority value",
+			"info": "Used to determine priority for activation of skills of the same type, a higher value means that it triggers first",
+            "placeholder": 0
+        }
+    ]
+}
+</script>
+
+<html>
+    <head>
+        <title>Custom Parameter Generator</title>
+        <style>
+            body {
+                background: #c1953c;
+                font-family: "tahoma"
+            }
+            .main-content {
+                background: #e0c796;
+                width: 600px;
+                margin: auto;
+                border: solid black 1px;
+                padding: 20px;
+                margin: auto;
+                min-height: calc(100% - 50px);
+                box-shadow: 10px 10px 10px rgba(0,0,0, 0.5);
+            }
+            .title {
+                text-align: center;
+            }
+            .error {
+                color: #ff0000;
+            }
+            .info {
+                font-style: italic;
+            }
+            .field {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-column-gap: 10px;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 10px;
+            }
+            .button-container {
+                margin-bottom: 10px;
+            }
+            .message {
+                margin-bottom: 10px;
+            }
+            .visually-hidden {
+                display: none;
+            }
+            textarea {
+                width: 100%;
+                min-height: 300px;
+                resize: none;
+                padding: 10px;
+            }
+        </style>
+        <script>
+            // Number
+            // checkbox or boolean
+            // dropdown
+            // string
+            // binary
+            // array
+
+            var UIGenerator = {
+                _fields: null,
+
+                init: function(schema) {
+                    console.log("Initializing Schema");
+
+                    this._fields = document.getElementById("fields");
+
+                    this.setTitle(schema["title"]);
+                    this.createFields(schema);
+
+                    this.initValueListeners();
+
+                    var button = document.getElementById("submit");
+                    button.addEventListener("click", this.outputCustomParameters);
+                    button.click();
+                    document.getElementById("copy").addEventListener("click", this.copyText);
+                },
+
+                setTitle: function(title) {
+                    if (title == undefined) {
+                        return;
+                    }
+
+                    document.getElementById("title").innerHTML = title;
+                    document.title = title;
+                },
+
+                outputCustomParameters: function(e) {
+                    e.preventDefault();
+                    document.getElementById("error").innerHTML = "";
+                    var string = "";
+                    var textarea = document.getElementById("output");
+
+                    var input = document.querySelectorAll("[data-id]");
+
+                    var inputArray = [];
+                    var index, count = input.length;
+                    var currentValue, currentType, subType;
+
+                    for (index = 0; index < count; index++) {
+                        currentValue = input[index].dataset.value;
+
+                        if (currentValue == undefined || currentValue == "" || currentValue == "NO_USE") {
+                            if (input[index].dataset.required == "true") {
+                                var error = document.getElementById("error");
+                                error.innerHTML = "<b>" + input[index].dataset.label + "</b> is a required field";
+                                setTimeout(function() {
+                                    error.innerHTML = "";
+                                }, 3000)
+                                return;
+                            }
+
+                            continue;
+                        }
+
+                        inputArray.push(input[index]);
+                    }
+
+                    count = inputArray.length
+                    for (index = 0; index < count; index++) {
+                        currentValue = inputArray[index].dataset.value;
+                        currentType = inputArray[index].getAttribute("type");
+
+                        if (currentType == "select") {
+                            if (typeof currentValue == "string") {
+								currentValue = "\"" + currentValue + "\"";
+                            }
+                        } else if (currentType ==  "literal") {
+                            currentValue = currentValue;
+                        } else if (currentType == "text") {
+                            currentValue = "\'" + currentValue + "\'";
+                        }else if (currentType == "checkbox") {
+                            if (currentValue == "true") {
+                                currentValue = true;
+                            } else {
+                                currentValue = false;
+                            }
+                        }
+
+                        string += inputArray[index].dataset.id + ": " + currentValue;
+                        
+                        if (index < count - 1) {
+                            string += ",";
+                        }
+
+                        string += "\n";
+                    }
+
+                    textarea.innerHTML = string;
+                },
+
+                copyText: function(e) {
+                    var output = document.getElementById("output");
+                    output.removeAttribute("disabled");
+                    output.select();
+                    document.execCommand('copy')
+                    output.setAttribute("disabled", "disabled");
+
+                    var message = document.getElementById("message");
+                    message.innerHTML = "Output text copied!"
+
+                    setTimeout(function() {
+                        message.innerHTML = "";
+                    }, 3000);
+                },
+
+                initValueListeners: function() {
+                    var inputs = document.querySelectorAll("input[data-id], select[data-id]");
+                    var self = this;
+                    var button = document.getElementById("submit");
+                    inputs.forEach(item => {
+                        item.addEventListener("change", function(event) {
+                            var currentTarget = event.currentTarget;
+                            var type = currentTarget.getAttribute("type");
+                            
+                            currentTarget.dataset.value = this.value;
+                            button.click();
+                            //self.outputCustomParameters(button)
+                        })
+                    })
+                },
+
+                createFields: function(schema) {
+                    var settings = schema["settings"];
+                    
+                    if (settings == undefined) {
+                        console.log("ERROR: Your schema settings are not set! Cancelling");
+                        return;
+                    }
+
+                    var element, currentSetting;
+                    for (index in settings) {
+                        currentSetting = settings[index];
+
+                        if (!this.validateSettings(currentSetting)) {
+                            continue;
+                        }
+
+                        switch (currentSetting["type"]) {
+                            case "checkbox":
+                                element = this.createCheckbox(currentSetting);
+                                break;
+                            case "number":
+                                element = this.createNumber(currentSetting);
+                                break;
+                            case "dropdown":
+                                element = this.createDropdown(currentSetting);
+                                break;
+                            case "text":
+                                element = this.createString(currentSetting);
+                                break;
+							case "literal":
+                                element = this.createString(currentSetting);
+                                break;
+                        }
+
+                        this._fields.appendChild(element);
+                    }
+                },
+
+                createNumber: function(setting) {
+                    var element = document.createElement("div");
+                    element.classList.add("field");
+
+                    var input = document.createElement("input");
+                    input.setAttribute('type', "number");
+                    input.setAttribute('data-id', setting["id"]);
+                    input.setAttribute('data-label', setting["label"]);
+                    input.setAttribute('placeholder', setting["placeholder"] == undefined ? "" : setting["placeholder"]);
+                    if (setting["default"]) {
+                        input.setAttribute("value", setting["default"]);
+                        input.setAttribute("data-value", setting["default"]);
+                    }
+
+                    var span = document.createElement("span");
+                    span.innerHTML = setting["label"];
+
+                    if (setting["required"] == true) {
+                        input.setAttribute('data-required', true);
+                        span.innerHTML += "*";
+                    }
+
+                    element.appendChild(span);
+                    element.appendChild(input);
+                    var info = document.createElement("span");
+                    if (setting["info"] != undefined) {
+                        info.innerHTML = setting["info"];
+                        info.classList.add("info");
+                    }
+                    element.appendChild(info);
+
+                    return element;
+                },
+
+                createString: function(setting) {
+                    var element = document.createElement("div");
+                    element.classList.add("field");
+
+                    var input = document.createElement("input");
+                    input.setAttribute('type', setting["type"]);
+                    input.setAttribute('data-id', setting["id"]);
+                    input.setAttribute('data-label', setting["label"]);
+                    input.setAttribute('placeholder', setting["placeholder"] == undefined ? "" : setting["placeholder"]);
+                    if (setting["default"]) {
+                        input.setAttribute("value", setting["default"]);
+                        input.setAttribute("data-value", setting["default"]);
+                    }
+
+                    var span = document.createElement("span");
+                    span.innerHTML = setting["label"];
+
+                    if (setting["required"] == true) {
+                        input.setAttribute('data-required', true);
+                        span.innerHTML += "*";
+                    }
+
+                    element.appendChild(span);
+                    element.appendChild(input);
+                    var info = document.createElement("span");
+                    if (setting["info"] != undefined) {
+                        info.innerHTML = setting["info"];
+                        info.classList.add("info");
+                    }
+                    element.appendChild(info);
+
+                    return element;
+                },
+
+                createCheckbox: function(setting) {
+                    var element = document.createElement("div");
+                    element.classList.add("field");
+
+                    var select = document.createElement("select");
+                    select.setAttribute('data-id', setting["id"]);
+                    select.setAttribute('data-label', setting["label"]);
+                    select.setAttribute('placeholder', setting["placeholder"] == undefined ? "" : setting["placeholder"]);
+                    select.setAttribute('type', "checkbox");
+
+                    var span = document.createElement("span");
+                    span.innerHTML = setting["label"];
+
+                    if (setting["required"] == true) {
+                        select.setAttribute('data-required', true);
+                        span.innerHTML += "*";
+                    }
+
+                    var none = document.createElement("option");
+                    none.setAttribute("value", "NO_USE");
+                    none.innerHTML = "-- Select An Option --";
+
+                    var yes = document.createElement("option");
+                    yes.setAttribute("value", true);
+                    yes.innerHTML = "True";
+
+                    var no = document.createElement("option");
+                    no.setAttribute("value", false);
+                    no.innerHTML = "False";
+
+                    select.appendChild(none);
+                    select.appendChild(yes);
+                    select.appendChild(no);
+
+                    if (setting["default"] != undefined) {
+                        select.value = setting["default"];
+                        select.setAttribute("data-value", setting["default"]);
+                    }
+
+                    element.appendChild(span);
+                    element.appendChild(select);
+
+                    var info = document.createElement("span");
+                    if (setting["info"] != undefined) {
+                        info.innerHTML = setting["info"];
+                        info.classList.add("info");
+                    }
+                    element.appendChild(info);
+
+                    return element;
+                },
+
+                createDropdown: function(setting) {
+                    var element = document.createElement("div");
+                    element.classList.add("field");
+
+                    var select = document.createElement("select");
+                    select.setAttribute('data-id', setting["id"]);
+                    select.setAttribute('data-label', setting["label"]);
+                    select.setAttribute('placeholder', setting["placeholder"] == undefined ? "" : setting["placeholder"]);
+                    select.setAttribute('type', "select");
+
+                    var span = document.createElement("span");
+                    span.innerHTML = setting["label"];
+
+                    if (setting["required"] == true) {
+                        select.setAttribute('data-required', true);
+                        span.innerHTML += "*";
+                    }
+
+                    var none = document.createElement("option");
+                    none.setAttribute("value", "NO_USE");
+                    none.innerHTML = "-- Select An Option --";
+
+                    select.appendChild(none);
+
+                    var options = setting["options"];
+                    var option, currentOption;
+                    for (index in options) {
+                        currentOption = options[index];
+
+                        option = document.createElement("option");
+                        option.setAttribute("value", currentOption["value"]);
+                        option.innerHTML = currentOption["label"];
+
+                        select.appendChild(option);
+                    }
+
+                    if (setting["default"] != undefined) {
+                        select.value = setting["default"];
+                        select.setAttribute("data-value", setting["default"]);
+                    }
+
+                    element.appendChild(span);
+                    element.appendChild(select);
+
+                    var info = document.createElement("span");
+                    if (setting["info"] != undefined) {
+                        info.innerHTML = setting["info"];
+                        info.classList.add("info");
+                    }
+                    element.appendChild(info);
+
+                    return element;
+                },
+
+                validateSettings: function(setting) {
+                    if (setting == undefined) {
+                        console.log("ERROR: Setting is not defined. Cancelling element creation.");
+                        return false;
+                    }
+
+                    if (setting["id"] == undefined) {
+                        console.log("ERROR: Setting ID is not defined. Cancelling element creation")
+                        return false;
+                    }
+
+                    if (setting["label"] == undefined) {
+                        console.log("ERROR: Setting Label is not defined. Cancelling element creation")
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+
+            var ChoiceType = {
+                NORMAL: 0,
+                SUPER: 1,
+                SUCK: 2
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                UIGenerator.init(schema);
+            });
+        </script>
+    </head>
+    <body>
+        <div class="main-content">
+            <h1 class="title" id="title"></h1>
+            <div class="fields" id="fields"></div>
+            <div class="error" id="error"></div>
+            <div class="button-container">
+                <button class="submit visually-hidden" id="submit">Submit</button>
+                <button class="copy" id="copy">Copy</button>
+            </div>
+            <div class="message" id="message"></div>
+            <textarea class="output" id="output" disabled></textarea>
+        </div>
+    </body>
+</html>
