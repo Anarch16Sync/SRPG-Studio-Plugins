@@ -29,6 +29,7 @@ RestrictedExperienceControl.obtainExperience = function(unit, getExp) {
     var i, count, objectArray;
     var sum = 0;
     var classGrowth = unit.getClass().getPrototypeInfo().getGrowthArray(unit.getLv());
+    var growthArray = [];
     
     if (!ExperienceControl._addExperience(unit, getExp)) {
         return null;
