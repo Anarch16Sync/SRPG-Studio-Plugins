@@ -25,22 +25,33 @@ ExperienceControl._createGrowthArray = function(unit) {
     return growthArray;
 };
 
-RestrictedExperienceControl._getGrowthArray = function(objectArray) {
-    var i, count, obj;
-    var growthArray = [];
+RestrictedExperienceControl.obtainExperience = function(unit, getExp) {
+    var i, count, objectArray;
+    var sum = 0;
     var classGrowth = unit.getClass().getPrototypeInfo().getGrowthArray(unit.getLv());
     
-    count = objectArray.length;
-    for (i = 0; i < count; i++) {
-        growthArray[i] = classGrowth[i];
+    if (!ExperienceControl._addExperience(unit, getExp)) {
+        return null;
     }
     
+    objectArray = this._createObjectArray(unit);
+    count = objectArray.length;
     for (i = 0; i < count; i++) {
-        obj = objectArray[i];
-        if (obj.value !== 0) {	
-            growthArray[obj.index] = obj.value + classGrowth[obj.index];
+        if (objectArray[i].value !== 0) {
+            // Count the number of grown parameters.
+            sum++;
         }
     }
     
+    objectArray = this._sortObjectArray(objectArray, sum, unit);
+    
+    var BasegrowthArray = this._getGrowthArray(objectArray);
+    
+    count = ParamGroup.getParameterCount();
+    for (i = 0; i < count; i++) {
+        growthArray[i] = BasegrowthArray[i] + classGrowth[i]
+    
+    }
+
     return growthArray;
 };
