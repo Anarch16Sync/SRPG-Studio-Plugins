@@ -18,10 +18,26 @@ The pursuit value in the setting now determines in what value of the sequence th
 ie a pursuit value of 3, means that the agility difference starts at 3, but a persuit value of 5 means the difference needed starts at 8,
 because 8 is the 5th value in the sequence.
 
+Optional Settings:
+This can be changed to required a special skill that allows to trigger the extra rounds, this allows it to coexist with the default pursuit
+and to work when pursuit is disable in the diffulty settings.
+
+To require the skill to trigger the extra rounds change REQUIRES_SKILL to true
 
 Author: Anarch16sync
- */
+*/
 
+//-------------------------------
+// settings
+//-------------------------------
+var REQUIRES_SKILL = false                      //false if no skill is required, true to require the skill to trigger extra rounds.
+var SKILL_FIBONACCI_PURSUIT = 'fibosuit16'; 	// skill keyword
+
+
+
+//------------------------------------------
+//Code Stuff below
+//------------------------------------------
 Calculator.getDifference = function(index) {
     var fibo=[0,1,2,3,5,8,13,21];
     if (index == null) {
@@ -47,9 +63,12 @@ Calculator.getDifference = function(index) {
 
 (function(){
     var alias001 = Calculator.calculateRoundCount;
-
+    
     Calculator.calculateRoundCount = function(active, passive, weapon) {
-            var rounds = alias001.call(this,active, passive, weapon)
+        var rounds = alias001.call(this,active, passive, weapon)
+
+        var skill = SkillControl.getPossessionCustomSkill(active, SKILL_FIBONACCI_PURSUIT);
+		if( skill !== null || !REQUIRES_SKILL ){
             var value, index,b,c;
             var activeAgi = AbilityCalculator.getAgility(active, weapon) + this.getAgilityPlus(active, passive, weapon);
 		    var passiveAgi = AbilityCalculator.getAgility(passive, ItemControl.getEquippedWeapon(passive));
@@ -70,7 +89,7 @@ Calculator.getDifference = function(index) {
                     rounds++;
         
             }
-        
+        }
             return rounds
 
         }
