@@ -1,3 +1,27 @@
+/* 
+Fibonacci Pursuit Plugin
+
+This plugin makes it so that is possible to have more than 2 rounds of combat based on how much big is the Agility difference,
+but each extra round of combat needs an agility increase that follows the Fibonacci sequence.
+
+i.e with a pursuit value of 3 in the settings, the thresholds for rounds are like this:
+Agility Diff    Rounds
+    3           2       
+    8           3
+    16          4
+    29          5
+
+and so on and so on.
+
+The pursuit value in the setting now determines in what value of the sequence the threshold starts
+
+ie a pursuit value of 3, means that the agility difference starts at 3, but a persuit value of 5 means the difference needed starts at 8,
+because 8 is the 5th value in the sequence.
+
+
+Author: Anarch16sync
+ */
+
 Calculator.getDifference = function(index) {
     var fibo=[0,1,2,3,5,8,13,21];
     if (index == null) {
