@@ -1,7 +1,9 @@
 
 /*--------------------------------------------------------------------------
-  Adds a new bottom window that displays a unit growth rates as radar graph.
-  requires Radar_chart.js
+  Adds a new bottom window that displays a unit growth rates as radar graph
+  for player units.
+
+  Requires Radar_chart.js to work.
   
   Growth rates displayed are total growth rates, including class and item bonuses.
 
