@@ -1,4 +1,4 @@
-/*  AI goes to wait
+/*  AI Scapes
 
 Author: Anarch16Sync
 
@@ -8,9 +8,10 @@ like enemies scaping the map.
 
 For better results use different pages for the event based on the Army that visits it. 
 For example: 	Page 1: Active | Player;
-				Page 2: Active | Enemy;
-				Page 3: Active | Ally
+				Page 2: Active | Enemy | "Custom Skill: SCAPE";
+				Page 3: Active | Ally | "Custom Skill: SCAPE";
 
+Adding the custom skill created as part of the condition makes sure that the wait event is not triggered by mistake by other AI units.
 
 To make an AI unit capable of going to Wait Events create a skill of type CUSTOM and set the keyword to SCAPE.
 
