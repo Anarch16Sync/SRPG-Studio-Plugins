@@ -156,3 +156,51 @@ UnitCommand.Metamorphoze._completeCommandMemberData = function() {
         aliasMetamorphozeCommand002.call(this)
     }
 }
+
+MetamorphozeScreen._prepareScreenMemberData = function(screenParam) {
+    this._unit = screenParam.unit;
+    this._isMapCall = screenParam.isMapCall;
+    this._classInfoWindow = createWindowObject(MultiClassInfoWindow, this);
+    this._classParameterWindow = createWindowObject(MetamorphozeClassParameterWindow, this);
+    this._classSelectWindow = createWindowObject(MultiClassSelectWindow, this);
+    this._infoWindow = createWindowObject(InfoWindow, this);
+    this._questionWindow = createWindowObject(QuestionWindow, this);
+    this._dynamicAnime = createObject(DynamicAnime);
+    this._classEntryArray = null;
+    this._currentIndex = 0;
+    this._returnData = null;
+};
+
+var MetamorphozeClassParameterWindow = defineObject(MultiClassParameterWindow,
+{
+    setBonusStatus: function(unit, targetClassEntry) {
+		var i, bonusArray, bonusArrayTarget;
+		var newBonusArray = [];
+		var count = ParamGroup.getParameterCount();
+		
+
+		if (targetClassEntry.isChange) {
+			bonusArray = this.getClassBonusArray(unit.getClass());
+			bonusArrayTarget = this.getClassBonusArray(targetClassEntry.cls);
+            var metamorphozeData = targetClassEntry.metamorphozeData;
+            if (metamorphozeData !== null) {
+                calc = metamorphozeData.getStatusCalculation();
+            }
+			for (i = 0; i < count; i++) {
+				newBonusArray[i] = bonusArrayTarget[i] - bonusArray[i];   
+        
+                if (calc !== null) {
+                    newBonusArray[i] += SymbolCalculator.calculate(unit.getParamValue(i), calc.getValue(i), calc.getOperatorSymbol(i)) - unit.getParamValue(i);
+                }
+			}
+		}
+		else {
+			for (i = 0; i < count; i++) {
+				newBonusArray[i] = 0;
+			}
+		}
+		
+		this._scrollbar.setStatusBonus(newBonusArray);
+	}
+}
+);
