@@ -1,4 +1,5 @@
 /* 
+ExtraItem Command
 Author: Anarch16Sync
 
 Overview: 
@@ -6,18 +7,26 @@ This plugin allows an item type to have its own unit command and class requirmen
 
 To use this plugin you need to add custom parameters to the weapon type and the class.
 
-Also you need to replace the 'ExtraItem' string in ExtraItemA16SCommandName with the name you want for the command,
-and replace the number in ExtraItemA16SWeaponTypeId = 2, with the id of the weapon type.
-
 Custom Parameter:
+
+Item Type:
 Add {isExtraItemA16S:true} to the item type you want to have its own command
 
+Class:
 Add {UseExtraItemA16S: true} to the classes you want to be able to use the new item type
+
+
+Configuration:
+Also you need to replace the 'ExtraItem' string in ExtraItemA16SCommandName with the name you want for the command,
+and replace the number in ExtraItemA16SWeaponTypeId = 2, with the id of the item type you want to have the new behavior.
+
+Dev Note: If you want to create multiple item types with this behavior, you can create copies of this plugin and search and replace all instances of "ExtraItemA16S" with a new unique name
+and a different ExtraItemA16SWeaponTypeId value. Then edit ExtraItem weaponList to add the new item block on the weaponlist renderer
 
 Changelog:
 
 2024-03-15 ver 1.0 
-Created
+Created based on Namae_mitei's ExtraWand plugin
 
 
 Terms of Use: 
@@ -127,32 +136,6 @@ Calculator.calculateDamageItemPlus= function(unit, targetUnit, item) {
 		
 		return plus;
 };
-
-WeaponTypeRenderer.drawClassWeaponList = function(x, y, cls) {
-    var i, data, handle;
-		var refList = cls.getEquipmentWeaponTypeReferenceList();
-		var count = refList.getTypeCount();
-		
-		for (i = 0; i < count; i++) {
-			data = refList.getTypeData(i);
-			handle = data.getIconResourceHandle();
-			GraphicsRenderer.drawImage(x + (i * 30), y, handle, GraphicsType.ICON);
-		}
-		
-		if (cls.getClassOption() & ClassOptionFlag.WAND) {
-			handle = this._getWandIcon();
-			GraphicsRenderer.drawImage(x + (i * 30), y, handle, GraphicsType.ICON)
-            i+=1;
-		}
-
-        if (cls.custom.UseExtraItemA16S){
-            handle = this._getExtraItemA16SIcon();
-			GraphicsRenderer.drawImage(x + (i * 30), y, handle, GraphicsType.ICON)
-        }
-};
-
-
-
 
 /* NEW Funcitons */
 
