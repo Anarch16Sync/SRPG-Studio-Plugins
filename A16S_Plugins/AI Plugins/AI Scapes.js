@@ -58,27 +58,24 @@ var aliasSkillAutoActionESU02 = SkillAutoAction._enterSkillUse;
 
 //I have no idea what this does, but it had checks for other skills so now it has for SCAPE
 SkillAutoAction._moveSkillUse = function() {
-		var result = MoveResult.CONTINUE;
+		var result = aliasSkillAutoActionMSU02.call(this)
 		var skillType = this._skill.getSkillType();
 		
 		if (skillType === SkillType.CUSTOM && this._skill.getCustomKeyword() === 'SCAPE') {
-			result = this._capsuleEvent.moveCapsuleEvent();	
-		} else {
-			return aliasSkillAutoActionMSU02.call(this)
+			result = this._capsuleEvent.moveCapsuleEvent();
 		}
 		return result
 	};
 
 //This is the part that makes the AI choose what skill to use, so the check for SCAPE needs to be added
 SkillAutoAction._enterSkillUse = function() {
-		var result = EnterResult.NOTENTER;
+		var result = aliasSkillAutoActionESU02.call(this)
 		var skillType = this._skill.getSkillType();
 		
 		if (skillType === SkillType.CUSTOM && this._skill.getCustomKeyword() === 'SCAPE') {
 			result = this._enterScape();	
-		} else {
-			return aliasSkillAutoActionESU02.call(this)
 		}
+
 		return result
 		
 	};
@@ -90,5 +87,31 @@ SkillAutoAction._enterScape = function() {
 		
 		return this._capsuleEvent.enterCapsuleEvent(event, true);
 	};
+
+	var aliasAIScorerSkillGAO = AIScorer.Skill._getAIObject;
+	AIScorer.Skill._getAIObject = function(unit, combination) {
+		var obj = aliasAIScorerSkillGAO.call(this, unit, combination)
+		var skillType = combination.skill.getSkillType();
+		
+		if (skillType === SkillType.CUSTOM && combination.skill.getCustomKeyword() === 'SCAPE') {
+			obj = ScapeItemAI;
+		}
+		
+		return createObject(obj);
+	}
+
+
+	ScapeItemAI = defineObject(BaseItemAI,
+			{
+				getItemScore: function(unit, combination) {
+					// Return high value to prioritize raiding.
+					return 300;
+				},
+				
+				getActionTargetType: function(unit, item) {
+					return ActionTargetType.SINGLE;
+				}
+			}
+			)
 
 })();

@@ -38,7 +38,7 @@ This plugin is provided as is, use at your own discretion. Redistribution and mo
 			} else {
 				aliasCombinationCollector.call(this,misc)
 			}
-		};
+		},
 	
 	//Combiantion for the Raiders, makes them go to Village Place Events	
 	CombinationCollector.Skill._setRaiderCombination = function(misc){
@@ -52,29 +52,35 @@ This plugin is provided as is, use at your own discretion. Redistribution and mo
 	//Function alias
 	var aliasSkillAutoActionMSU = SkillAutoAction._moveSkillUse;
 	var aliasSkillAutoActionESU = SkillAutoAction._enterSkillUse;
-	
+	var aliasSkillAutoActionDSU = SkillAutoAction._drawSkillUse;
+
 	//I have no idea what this does, but it had checks for other skills so now it has for RAIDER
 	SkillAutoAction._moveSkillUse = function() {
-			var result = MoveResult.CONTINUE;
+			var result = aliasSkillAutoActionMSU.call(this)
 			var skillType = this._skill.getSkillType();
 			
 			if (skillType === SkillType.CUSTOM && this._skill.getCustomKeyword() === 'RAIDER') {
 				result = this._eventTrophy.moveEventTrophyCycle();	
-			} else {
-				return aliasSkillAutoActionMSU.call(this)
 			}
 			return result
+		};
+
+	SkillAutoAction._drawSkillUse = function() {
+			var skillType = this._skill.getSkillType();
+			if (skillType === SkillType.CUSTOM && this._skill.getCustomKeyword() === 'RAIDER') {
+				this._eventTrophy.drawEventTrophyCycle();
+			} else {
+				aliasSkillAutoActionDSU.call(this)
+			}
 		};
 	
 	//This is the part that makes the AI choose what skill to use, so the check for RAIDER needs to be added
 	SkillAutoAction._enterSkillUse = function() {
-			var result = EnterResult.NOTENTER;
+			var result = aliasSkillAutoActionESU.call(this)
 			var skillType = this._skill.getSkillType();
 			
 			if (skillType === SkillType.CUSTOM && this._skill.getCustomKeyword() === 'RAIDER') {
-				result = this._enterRaiding();	
-			} else {
-				return aliasSkillAutoActionESU.call(this)
+				result = this._enterRaiding();
 			}
 			return result
 			
@@ -89,4 +95,29 @@ This plugin is provided as is, use at your own discretion. Redistribution and mo
 			return this._eventTrophy.enterEventTrophyCycle(this._unit, event);
 		};
 	
+	var aliasAIScorerSkillGAO = AIScorer.Skill._getAIObject;
+	AIScorer.Skill._getAIObject = function(unit, combination) {
+		var obj = aliasAIScorerSkillGAO.call(this, unit, combination)
+		var skillType = combination.skill.getSkillType();
+		
+		if (skillType === SkillType.CUSTOM && combination.skill.getCustomKeyword() === 'RAIDER') {
+			obj = RaidItemAI;
+		}
+		
+		return createObject(obj);
+	}
+
+
+	RaidItemAI = defineObject(BaseItemAI,
+			{
+				getItemScore: function(unit, combination) {
+					// Return high value to prioritize raiding.
+					return 300;
+				},
+				
+				getActionTargetType: function(unit, item) {
+					return ActionTargetType.SINGLE;
+				}
+			}
+			)
 	})();

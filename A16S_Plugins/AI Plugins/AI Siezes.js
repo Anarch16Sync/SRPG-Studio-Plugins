@@ -57,27 +57,24 @@ var aliasSkillAutoActionESU02 = SkillAutoAction._enterSkillUse;
 
 //I have no idea what this does, but it had checks for other skills so now it has for SIEGER
 SkillAutoAction._moveSkillUse = function() {
-		var result = MoveResult.CONTINUE;
+		var result = aliasSkillAutoActionMSU02.call(this)
 		var skillType = this._skill.getSkillType();
 		
 		if (skillType === SkillType.CUSTOM && this._skill.getCustomKeyword() === 'SIEGER') {
 			result = this._capsuleEvent.moveCapsuleEvent();	
-		} else {
-			return aliasSkillAutoActionMSU02.call(this)
 		}
 		return result
 	};
 
 //This is the part that makes the AI choose what skill to use, so the check for SIEGER needs to be added
 SkillAutoAction._enterSkillUse = function() {
-		var result = EnterResult.NOTENTER;
+		var result = aliasSkillAutoActionESU02.call(this)
 		var skillType = this._skill.getSkillType();
 		
 		if (skillType === SkillType.CUSTOM && this._skill.getCustomKeyword() === 'SIEGER') {
 			result = this._enterSiege();	
-		} else {
-			return aliasSkillAutoActionESU02.call(this)
 		}
+
 		return result
 		
 	};
@@ -89,5 +86,31 @@ SkillAutoAction._enterSiege = function() {
 		
 		return this._capsuleEvent.enterCapsuleEvent(event, true);
 	};
+
+	var aliasAIScorerSkillGAO = AIScorer.Skill._getAIObject;
+	AIScorer.Skill._getAIObject = function(unit, combination) {
+		var obj = aliasAIScorerSkillGAO.call(this, unit, combination)
+		var skillType = combination.skill.getSkillType();
+		
+		if (skillType === SkillType.CUSTOM && combination.skill.getCustomKeyword() === 'SIEGER') {
+			obj = SiezeItemAI;
+		}
+		
+		return createObject(obj);
+	}
+
+
+	SiezeItemAI = defineObject(BaseItemAI,
+			{
+				getItemScore: function(unit, combination) {
+					// Return high value to prioritize raiding.
+					return 300;
+				},
+				
+				getActionTargetType: function(unit, item) {
+					return ActionTargetType.SINGLE;
+				}
+			}
+			)	
 
 })();
