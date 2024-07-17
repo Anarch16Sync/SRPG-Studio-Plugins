@@ -5,14 +5,53 @@ How to use: Add into your plugin folder, set the desired Growth Settings under p
 Now player characters will gain the same stats as a enemy unit when level up plus their own personal growths.
 
 Author: Anarch16Sync
+
+Updates
+2024-07-17: Added Support for O-to's EP & FP plugin, check that plugin readme for information on setting the class fixed growth custom paramters. 
 */
+ExperienceControl._createClassGrowthArray = function(unit){
+    var baseClassGrowth = unit.getClass().getPrototypeInfo().getGrowthArray(unit.getLv())
+    var growthArray = [];
+    growthArray = this._appendCustomClassGrowth(unit,baseClassGrowth)
+
+    return growthArray
+}
+
+ExperienceControl._appendCustomClassGrowth = function(unit,growthArray){
+
+    if(typeof UnitParameter.MEP !== 'undefined') {
+        var plus = 0
+        var aryPlusVal = OT_GetEPCustom(unit.getClass(), 'PrototypeGrowth');
+        if(aryPlusVal !== null) {
+            var nextLv = unit.getLv();
+            if(typeof aryPlusVal[nextLv] === 'number') {
+                plus = aryPlusVal[nextLv];
+            }
+        }
+        growthArray.splice(ParamGroup.getParameterIndexFromType(ParamType.MEP), 0, plus);
+    }
+
+    if(typeof UnitParameter.MFP !== 'undefined') {
+            var plus = 0
+			var aryPlusVal = OT_GetFPCustom(unit.getClass(), 'PrototypeGrowth');
+			if(aryPlusVal !== null) {
+				var nextLv = unit.getLv();
+				if(typeof aryPlusVal[nextLv] == 'number') {
+					plus = aryPlusVal[nextLv];
+				}
+			}
+			growthArray.splice(ParamGroup.getParameterIndexFromType(ParamType.MFP), 0, plus)
+    }
+
+    return growthArray
+}
 
 ExperienceControl._createGrowthArray = function(unit) {
     var i, n;
     var count = ParamGroup.getParameterCount();
     var growthArray = [];
     var weapon = ItemControl.getEquippedWeapon(unit);
-    var classGrowth = unit.getClass().getPrototypeInfo().getGrowthArray(unit.getLv());
+    var classGrowth = this._createClassGrowthArray(unit);
     
     for (i = 0; i < count; i++) {
         // Calculate the growth value (or the growth rate).
@@ -34,7 +73,7 @@ RestrictedExperienceControl.obtainExperience = function(unit, getExp) {
         return null;
     }
 
-    var classGrowth = unit.getClass().getPrototypeInfo().getGrowthArray(unit.getLv());
+    var classGrowth = this._createClassGrowthArray(unit);
     
     objectArray = this._createObjectArray(unit);
     count = objectArray.length;
