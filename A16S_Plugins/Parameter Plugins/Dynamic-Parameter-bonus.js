@@ -62,6 +62,7 @@ this tend to crash with out of memory or out of stack errors.
 
 
 2024-08-07 - Created
+2024-10-04 - removed extra root.log and fixed comments
  */
 
 //Custom Function that is used to return the description of the bonus, returns a number or a string.
@@ -178,7 +179,7 @@ BaseUnitParameter._getItemBonus = function(unit, isParameter) {
     return d;
 },
 
-//Changed getParameterBonus to getParameterDesc
+//Changed getParameterBonus to getCustomBonusDesc
 ItemSentence.Bonus.drawItemSentence = function(x, y, item) {
             var i, n;
             var count = ParamGroup.getParameterCount();
@@ -200,7 +201,7 @@ ItemSentence.Bonus.drawItemSentence = function(x, y, item) {
         }
 
 
-//Changed getParameterBonus to getParameterDesc        
+//Changed getParameterBonus to getCustomBonusDesc        
 ItemInfoRenderer.getDopingCount = function(item, isParameter) {
         var i;
         var n = 0;
@@ -220,11 +221,10 @@ ItemInfoRenderer.getDopingCount = function(item, isParameter) {
 				count2++;
 			}
 		}
-		root.log(count2)
 		return count2;
 },
 
-//Changed getParameterBonus to getParameterDesc and the drawing of the value to depend getParameterDesc returns a number or a string.
+//Changed getParameterBonus to getCustomBonusDesc and the drawing of the value to depend getCustomBonusDesc returns a number or a string.
 ItemInfoRenderer.drawDoping = function(x, y, item, isParameter) {
     var i, text;
     var n = 0;
