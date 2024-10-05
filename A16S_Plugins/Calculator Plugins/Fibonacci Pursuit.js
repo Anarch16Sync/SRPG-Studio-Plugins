@@ -25,6 +25,8 @@ and to work when pursuit is disable in the diffulty settings.
 To require the skill to trigger the extra rounds change REQUIRES_SKILL to true
 
 Author: Anarch16sync
+2024-10-05 Added Compatibility for Dynamic-Support-Expansion
+
 */
 
 //-------------------------------
@@ -64,16 +66,25 @@ Calculator.getDifference = function(index) {
 (function(){
     var alias001 = Calculator.calculateRoundCount;
     
-    Calculator.calculateRoundCount = function(active, passive, weapon) {
-        var rounds = alias001.call(this,active, passive, weapon)
+    Calculator.calculateRoundCount = function(active, passive, weapon, activeTotalStatus,passiveTotalStatus) {
+        if(typeof SupportSkillControl !== 'undefined'){
+            var rounds = alias001.call(this,active, passive, weapon,activeTotalStatus,passiveTotalStatus)
+        } else {
+            var rounds = alias001.call(this,active, passive, weapon)
+        }
 
         var skill = SkillControl.getPossessionCustomSkill(active, SKILL_FIBONACCI_PURSUIT);
 		if( skill !== null || !REQUIRES_SKILL ){
             var value, index,b,c;
-            var activeAgi = AbilityCalculator.getAgility(active, weapon) + this.getAgilityPlus(active, passive, weapon);
-		    var passiveAgi = AbilityCalculator.getAgility(passive, ItemControl.getEquippedWeapon(passive));
-            
-            
+
+            if(typeof SupportSkillControl !== 'undefined'){
+                activeAgi = AbilityCalculator.getAgility(active, weapon) + this.getAgilityPlus(active, passive, weapon, activeTotalStatus);
+		        passiveAgi = AbilityCalculator.getAgility(passive, ItemControl.getEquippedWeapon(passive)) + this.getAgilityPlus(passive, active, ItemControl.getEquippedWeapon(passive), passiveTotalStatus);
+            } else {
+                var activeAgi = AbilityCalculator.getAgility(active, weapon) + this.getAgilityPlus(active, passive, weapon);
+		        var passiveAgi = AbilityCalculator.getAgility(passive, ItemControl.getEquippedWeapon(passive));
+            }
+
             index = DataConfig.getRoundDifference()+(rounds-1);
             value = this.getDifference(index);
             b=this.getDifference(index+1)
