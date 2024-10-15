@@ -243,12 +243,16 @@ CompatibleCalculator._getCustomCompatible = function(active, passive, weapon) {
 	},
 
 CompatibleCalculator._getSkillCompatibleArray = function (active,passive,weapon){
-		var arr, count;
+		var arr;
+		var count= 0;
 		var compatibleArray = []
 
-		arr = SkillControl.getDirectSkillArray(active, SkillType.CUSTOM, CompatibleSkill)
+		//Only create the skill array if the opponent doesn't invalidate skills.
+		if (SkillControl.getBattleSkillFromFlag(passive, active, SkillType.INVALID, InvalidFlag.SKILL) == null) {
+			arr = SkillControl.getDirectSkillArray(active, SkillType.CUSTOM, CompatibleSkill);
+			count = arr.length;
+		}
 
-		count = arr.length;
 		for (i = 0; i < count; i++) {
 			skill = arr[i].skill;
 			
