@@ -63,6 +63,7 @@ this tend to crash with out of memory or out of stack errors.
 
 2024-08-07 - Created
 2024-10-04 - removed extra root.log and fixed comments
+2024-10-19 - added check for cases where parameters don't define a getSignal function, mostly the case in other plugins.
  */
 
 //Custom Function that is used to return the description of the bonus, returns a number or a string.
@@ -117,7 +118,7 @@ BaseUnitParameter.getUnitTotalParamBonus = function(unit, weapon) {
 BaseUnitParameter.getCustomParameterBonus = function(unit,obj){
     var paramBonus;
     var paramBonusArray = obj.custom.paramBonus;
-    if (typeof paramBonusArray !== 'undefined'){
+    if (typeof paramBonusArray !== 'undefined' && typeof this.getSignal !== 'undefined'){
         paramBonus = paramBonusArray[this.getSignal()];
     }
     var paramBonusType = typeof paramBonus;
@@ -134,7 +135,7 @@ BaseUnitParameter.getCustomParameterBonus = function(unit,obj){
 BaseUnitParameter.getCustomBonusDesc = function(obj){
     var BonusDesc = null;
     var paramBonusArray = obj.custom.paramBonus;
-    if (typeof paramBonusArray !== 'undefined'){
+    if (typeof paramBonusArray !== 'undefined' && typeof this.getSignal !== 'undefined'){
         var paramBonus = paramBonusArray[this.getSignal()];
         var typeBonus = typeof paramBonus;
         if(typeBonus == "number"){
